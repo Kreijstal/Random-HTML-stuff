@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html><body>
+<canvas id="myCanvas" width="3000" height="3000" style="border:1px solid #c3c3c3;"></canvas>
+<script type="text/javascript">
+    var c=document.getElementById("myCanvas");
+    var cxt=c.getContext("2d");
+    var centerX = 550;
+    var centerY = 350;
+    cxt.moveTo(centerX, centerY);
+
+    var STEPS_PER_ROTATION =8;
+    var increment = 2*Math.PI/STEPS_PER_ROTATION;       
+    var theta = increment;
+    var oldX=centerX,oldY=centerY;
+function a() {
+    var newX = centerX + (theta*2.5) * Math.cos(theta);
+    var newY = centerY + (theta*2.5) * Math.sin(theta);
+//console.log(newX,newY);
+    cxt.quadraticCurveTo(((oldX+newX)/2)+theta*2.5,((oldY+newY)/2)+theta*2.5,newX, newY);
+    //cxt.arc(newX,newY,5,0,Math.PI*2,false);
+    cxt.moveTo(newX,newY);
+    oldX=newX,oldY=newY;
+    theta = theta + increment;
+    cxt.lineWidth = 0.2;
+    cxt.stroke();
+    if (theta < 900 * Math.PI) {
+        setTimeout(arguments.callee, 50);
+    } else {
+        
+    }
+}
+a();
+
+
+    
+</script></body></html>

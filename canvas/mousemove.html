@@ -1,0 +1,23 @@
+<!DOCTYPE html><html><head></head><body><canvas id="canvas"></canvas><script>
+canvas=document.getElementById('canvas');
+canvas.height=canvas.width=500;
+ctx = canvas.getContext&&canvas.getContext("2d");
+function getOffset(el){
+    var _x = 0,_y = 0;
+    while(el) {
+        _x += el.offsetLeft- el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+
+canvas.addEventListener("mousemove",function(e){
+var g=getOffset(canvas);
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+//ctx.arc(e.clientX+document.body.scrollLeft-g.left,e.clientY+document.body.scrollTop-g.top,5,0,2*Math.PI);
+ctx.fillRect(e.clientX-g.left,e.clientY-g.top,30,30)
+},false);
+
+
+</script></body></html>

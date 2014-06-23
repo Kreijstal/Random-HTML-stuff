@@ -1,0 +1,63 @@
+How to understand brainfuck?
+
+It's easy, imagine a list, this lists has all it's values (contents) default to 0.
+The length of the array (the list) depends on the system where brainfuck is run, in some systems it's a loop, in others the array can extend undefinitively
+Now there are commands you use to change those values and move the pointer.
+The pointer is the index of the array you're currently using.
+There are 4 basic operators that are easy to learn
+
++ : Adds +1 on the index the pointer indicates
+- : Decreases -1 on the index the pointer indicates
+> : Moves the pointer right
+< : Moves the pointer left
+
+We can imagine the array as something like this: [0,0,0,0,0,0,0.....]
+The pointer usually starts at the first index: [0,0,0,0,0,0,0.....]
+                                                ^
+The pointer is being represented with the '^' character below the array.
+Some examples: I'm going to show visually what happens when you enter the operators
+Operation:+
+[0,0,0,0,0,0,0.....]  -> [1,0,0,0,0,0,0.....]
+ ^                        ^
+Operation:++++-
+[1,0,0,0,0,0,0.....]  -> [4,0,0,0,0,0,0.....]
+ ^                        ^
+Operation:---- (Assume another array is being used)
+[11,0,4,10,20,0,0.....]  -> [7,0,4,10,20,0,0.....]
+ ^                           ^
+Operation:> 
+[7,0,4,10,20,0,0.....]  -> [7,0,4,10,20,0,0.....]
+ ^                            ^
+Operation:>>>
+[0,0,0,0,0,0,0.....]  -> [0,0,0,0,0,0,0.....]
+ ^                              ^
+Operation:<<<
+[0,0,0,0,0,0,0.....]  -> [0,0,0,0,0,0,0.....]
+         ^                  ^
+Operation:>>< (Yes, it's dumb, but explains the point)
+[0,0,0,0,0,0,0.....]  -> [0,0,0,0,0,0,0.....]
+ ^                          ^
+Operation:++>+++>>>++
+[0,0,0,0,0,0,0.....]  -> [0,0,2,3,0,0,2.....]
+     ^                                ^
+Operation:>>>+<++<
+[0,0,0,0,0,0,0.....]  -> [0,0,2,1,0,0,0.....]
+ ^                          ^ 
+I believe those were enough examples, so we can begin talking about the "[" & "]" operators.
+Basically they will do a loop which will repeat the same operators until when at the end of the loop the pointer is located in a zero value..
+For example
+Say we want too loop adding 4 (++++) at the next pointer twice
+so:                                 
+++ adds 2 to the current pointer: {2,0,0}
+[ begins the loop
+> moves the pointer to the right
+++++ adds 4  {2,4,0}
+< moves pointer back to the left (the beginning)
+- decreases current value by 1 {1,4,0}
+] ends loop, checks if current value is 0, if it's 0 stop, if it is not 0, it runs again
+after a second run the array will look like this {0,8,0}
+So the operation would be:++[>++++<-]
+[0,0,0,0,0,0,0.....]  -> [0,8,0,0,0,0,0.....]
+ ^                        ^ 
+There's also the . and , operators which will scan and print the current bytes.  
+and that's pretty much it, now you can enjoy the pleasures of brainfuck.

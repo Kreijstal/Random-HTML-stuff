@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html><body>
+<canvas id="myCanvas" width="3000" height="3000" style="border:1px solid #c3c3c3;"></canvas>
+<script type="text/javascript">
+
+function FindDistanceBetween2Points(x1,y1,x2,y2){//yay math!
+    var x=x1-x2,y=y1-y2,h2=(x*x)+(y*y);//am I reivnenting the wheel, or there is a function that already does it?
+    return Math.sqrt(h2);
+}
+
+function getAngleFromP1ToP2(x1,y1,x2,y2){//google doesn't even give me the functions!
+    var x=x2-x1,y=y2-y1;//reinventing the wheel is mandatory
+    return Math.atan(y/x);
+}
+
+function PolarCoordinatesToCartesian(Angle,Distance){
+    var y=Math.sin(Angle)*Distance,x=Math.cos(Angle)*Distance;
+    return {x:x,y:y};
+}
+function hsv2rgb(h,s,v) {
+// Adapted from http://www.easyrgb.com/math.html
+// hsv values = 0 - 1, rgb values = 0 - 255
+var r, g, b;
+var RGB = {};
+if(s==0){
+  RGB.red=RGB.green=RGB.blue=Math.round(v*255);
+}else{
+  // h must be < 1
+  var var_h = h * 6;
+  if (var_h==6) var_h = 0;
+  //Or ... var_i = floor( var_h )
+  var var_i = Math.floor( var_h );
+  console.log(var_h,var_i,var_h-var_1,s);
+  var var_1 = v*(1-s);
+  var var_2 = v*(1-s*(var_h-var_i));
+  var var_3 = v*(1-s*(1-(var_h-var_i)));
+  if(var_i==0){ 
+    var_r = v; 
+    var_g = var_3; 
+    var_b = var_1;
+  }else if(var_i==1){ 
+    var_r = var_2;
+    var_g = v;
+    var_b = var_1;
+  }else if(var_i==2){
+    var_r = var_1;
+    var_g = v;
+    var_b = var_3
+  }else if(var_i==3){
+    var_r = var_1;
+    var_g = var_2;
+    var_b = v;
+  }else if (var_i==4){
+    var_r = var_3;
+    var_g = var_1;
+    var_b = v;
+  }else{ 
+    var_r = v;
+    var_g = var_1;
+    var_b = var_2
+  }
+  //rgb results = 0 ÷ 255  
+  RGB.red=Math.round(var_r * 255);
+  RGB.green=Math.round(var_g * 255);
+  RGB.blue=Math.round(var_b * 255);
+  }
+return RGB;  
+};
+
+function bound01(n, max) {
+    if (isOnePointZero(n)) { n = "100%"; }
+    var processPercent = isPercentage(n);
+    n = Math.min(max, Math.max(0, parseFloat(n)));
+    if (processPercent) {
+        n = parseInt(n * max, 10) / 100;
+    }
+    if ((Math.abs(n - max) < 0.000001)) {
+        return 1;
+    }
+
+
+    return (n % max) / parseFloat(max);
+
+}
+function isOnePointZero(n) {
+    return typeof n == "string" && n.indexOf('.') != -1 && parseFloat(n) === 1;
+}
+function isPercentage(n) {
+    return typeof n === "string" && n.indexOf('%') != -1;
+}
+
+    var c=document.getElementById("myCanvas");
+    var cxt=c.getContext("2d");
+    var centerX = 850;
+    var centerY = 650;
+    cxt.moveTo(centerX, centerY);
+
+    var STEPS_PER_ROTATION =3;
+    var increment = 2*Math.PI/STEPS_PER_ROTATION;       
+    var theta = increment;
+    var oldX=centerX,oldY=centerY,ii=0,col;
+function a() {
+    var newX = centerX + (theta*1) * Math.cos(theta),newY = centerY + (theta*1) * Math.sin(theta),coo;
+//console.log(newX,newY);
+    coo=PolarCoordinatesToCartesian(getAngleFromP1ToP2(centerX,centerY,(newX+oldX)/2,(newY+oldY)/2),(FindDistanceBetween2Points(centerX,centerY,newX,newY)+FindDistanceBetween2Points(centerX,centerY,oldX,oldY))/2);//gotta love looooooooong function names amirite?
+    
+    col=hsv2rgb((ii++%300)/300,1,1);
+    col2=hsv2rgb((((ii++))%300)/300,1,1);
+    col=[col.red,col.green,col.blue];
+    col2=[col2.red,col2.green,col2.blue];
+    //cxt.arc(newX,newY,5,0,Math.PI*2,false);
+    cxt.beginPath();
+    
+    grad= cxt.createLinearGradient(oldX, oldY, newX, newY);
+    
+    
+grad.addColorStop(0, "rgb("+col2.join(',')+")");
+grad.addColorStop(1, "rgb("+col.join(',')+")");
+    cxt.strokeStyle=grad;
+    cxt.moveTo(newX,newY);
+    cxt.arc(newX,newY,2,0,Math.PI*2,false);
+    cxt.arc(coo.x,coo.y,5,0,Math.PI*2,false);
+    oldX=newX,oldY=newY;
+    theta = theta + increment;
+    cxt.lineWidth = 2;
+    cxt.stroke();
+    if (theta < 900 * Math.PI) {
+        setTimeout(arguments.callee, 50);
+    } else {
+        
+    }
+}
+a();
+</script></body></html>

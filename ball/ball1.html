@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Ball move</title>
+  <style>div{width:30px;height:30px;background:red;border-radius: 60px;position:absolute;}</style>
+  </head>
+  <body>
+       <div id='ball'></div>
+        <!--rate it motherfuckers-->
+       <script>
+       /*Yay, I created all of this, no libraries!!, so smart :)*/
+       function isPosNeg(i1,i2){//is one number negative and the other positive???
+       //0 being positive
+//return Math.abs(i1)>=Math.abs(i1+i2); CLEVER HOWEVER DOESN'T WORK WITH TINY NUMBERS FUCK or when i2=i1*2
+return i1>=0&&i2<0?true:i1<0&&i2>=0;
+}
+       function moveElementTo(x,y,element){//css based, element position should be fixed or absolute
+element.style.left=x+'px';
+element.style.top=y+'px';
+return element.style;
+}
+function initialMovement(positionX,positionY,speedX,speedY,accelerationX,accelerationY,callback){//inits movemens, it does all the math, it calls callback to move the element, and to call itself again if callback returns true..
+var psx=positionX+speedX,
+psy=positionY+speedY,
+spdx=speedX+accelerationX,spdy=speedY+accelerationY,MaxX=false,MaxY=false;
+//console.log(spdy,speedY)
+if(isPosNeg(spdx,speedX)){
+MaxX=true;
+}
+if(isPosNeg(spdy,speedY)){
+MaxY=true;
+console.log("MAXY");
+}
+
+if(callback(psx,psy,spdx,spdy,accelerationX,accelerationY,MaxX,MaxY)){
+setTimeout(function(){initialMovement(psx,psy,spdx,spdy,accelerationX,accelerationY,callback)},20)}
+};
+
+initialMovement(50,50,50,78,-0.05,1,function(x,y,spx,spy,ax,ay,mx,my){//callback
+s=ball.getClientRects()[0];
+
+sx=x-(s.width/2);
+sy=y-(s.height/2);
+if(bounce(s,x,y,sx,sy,spx,spy,ax,ay,mx,my,arguments.callee)){//if bounce returns true, moves the element, and returns true, meaning, everything is fine..
+moveElementTo(sx,sy,ball);}else{return false;}
+return true;
+})
+
+
+function bounce(s,x,y,sx,sy,spx,spy,ax,ay,mx,my,cb){
+//BOUNCES MOTHERFUCKER
+//console.log(x,y,document.height,document.width)
+if(ax){
+if(Math.round(spx)==0){
+initialMovement(x,y,0,spy,0,ay,cb);
+return false;
+}}
+if(my&&sy+s.height+6>document.documentElement.clientHeight){
+//alert([sy])
+//console.log(sx,ax,x)
+initialMovement(x,y,spx,0,ax,0,cb);
+return false;
+}
+if(mx&&(sx-8)<0){
+
+//initialMovement(x,y,0,spy,0,ay,cb);
+//return false;
+}
+if(x+(s.width/2)>=document.documentElement.clientWidth){//if ball has moved beyond the document width
+console.log("FAG1")
+if(spx>0){
+initialMovement(x,y,-spx-0.1,spy,-ax,ay,cb);
+return false;
+}
+return true;
+}
+if(y+(s.height/2)>=document.documentElement.clientHeight){//if ball has moved beyond document height
+//console.log("FAG",y)
+if(spy>0){
+//console.log(y)
+initialMovement(x,y,spx,-(spy-4),ax,ay,cb);
+return false;
+}
+return true;
+}
+if(sx<0){//if ball has moved beyond 0 in x
+if(spx<0){
+initialMovement(x,y,-(spx+0.1),spy,-ax,ay,cb);
+return false;
+}
+return true;
+}
+if(sy<0){//if ball has moved beyond 0 in y
+if(spy<0){
+initialMovement(x,y,spx,-(spy),ax,ay,cb);
+return false;
+}
+return true;
+};return true;}</script>
+  </body>
+</html>

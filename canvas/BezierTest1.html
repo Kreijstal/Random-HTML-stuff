@@ -1,0 +1,200 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Bezier Curve Attempt!</title>
+  <script>
+var requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function(/* function */ callback, /* DOMElement */ element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+function getOffset(el){
+    var _x = 0,_y = 0;
+    while(el) {
+        _x += el.offsetLeft- el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+var coordArr=[];    
+function img(a){
+var b=new Image;b.src=a;return b;
+}    
+window.addEventListener("load",function(){
+var canvas = document.getElementById('canvas');
+canvas.height = canvas.width = 1000;
+var ctx = canvas.getContext && canvas.getContext("2d");
+//2 LINES
+
+window.addEventListener("mousedown",function(e){
+var g=getOffset(canvas);
+coordArr.push([e.clientX-g.left,e.clientY-g.top]);
+if(coordArr.length==3){
+bezierCurve(coordArr.splice(0),50);
+}   },false);
+function getMidwayPoint(){//countless points
+var end=[];
+for(var x=0;x<arguments[0].length;x++){end[x]=0; //Endless axis that means it supports 1D, 2D, 3D, 4D, 5D etc..
+for(var i=0,l=arguments.length;i<l;i++)end[x]+=arguments[i][x];}
+return end.map(function(c){return c/l})
+}
+function Draw2DPoints(){//countless points //non3D
+//this.lineTo will be used, pass context as this.
+
+for(var i=0,l=arguments.length;i<l;i++)this.lineTo.apply(this,arguments[i]);
+
+//returns nothing
+}
+function getBezierPoint(n,a){
+var c=a,k=[];
+while(c.length>1){
+for(var i=0,l=c.length-1;i<l;i++){
+k.push([(c[i][0]-c[i+1][0])*n+c[i+1][0],(c[i][1]-c[i+1][1])*n+c[i+1][1]]);
+}
+c=k.splice(0);}
+return c.pop();
+}
+function splitCuadraticBezierInHalves(bezierCuadratic){
+var result=[],half;
+for(var i=0,l=bezierCuadratic.length;i<l;i++){
+half=getBezierPoint(1/2,bezierCuadratic[i]);
+result.push([bezierCuadratic[i][0],getMidwayPoint(bezierCuadratic[i][0],bezierCuadratic[i][1]),half]);
+result.push([half,getMidwayPoint(bezierCuadratic[i][1],bezierCuadratic[i][2]),bezierCuadratic[i][2]]);
+}
+return result;
+}
+function bezierCurve(fag, divs) {
+var bezierPoints=[];
+ctx.beginPath();
+    ctx.moveTo.apply(ctx, fag[1]);
+    ctx.lineTo.apply(ctx, fag[0]);
+    ctx.moveTo.apply(ctx, fag[1]);
+    ctx.lineTo.apply(ctx, fag[2]);
+    ctx.stroke();
+    var i = 0;
+    requestAnimFrame(function () {
+        //Difference between 0 and 1!
+        ctx.beginPath();
+        var y = fag[0][1] - (((fag[0][1] - fag[1][1]) / divs) * i),
+            x = fag[0][0] - (((fag[0][0] - fag[1][0]) / divs) * i);
+        //ctx.moveTo(x,y);
+        ctx.moveTo(x + 10, y);
+        ctx.arc(x, y, 10, 0, Math.PI * 2, true);
+        y = (((fag[2][1] - fag[1][1]) / divs) * i) + fag[1][1], x = (((fag[2][0] - fag[1][0]) / divs) * i) + fag[1][0];
+        //ctx.lineTo(x,y);
+        //ctx.moveTo(x+10,y);
+        //ctx.arc(x,y,10,0,Math.PI*2,true);
+        ctx.stroke();
+        if (i++ < divs) {
+            requestAnimFrame(arguments.callee);
+        } else {;
+            i = 0;
+            requestAnimFrame(function () {
+                //Difference between 0 and 1!
+                ctx.beginPath();
+                var y = fag[0][1] - (((fag[0][1] - fag[1][1]) / divs) * i),
+                    x = fag[0][0] - (((fag[0][0] - fag[1][0]) / divs) * i);
+                //ctx.moveTo(x,y);
+                //ctx.moveTo(x+10,y);
+                //ctx.arc(x,y,10,0,Math.PI*2,true);
+                y = (((fag[2][1] - fag[1][1]) / divs) * i) + fag[1][1], x = (((fag[2][0] - fag[1][0]) / divs) * i) + fag[1][0];
+                //ctx.lineTo(x,y);
+                ctx.moveTo(x + 10, y);
+                ctx.arc(x, y, 10, 0, Math.PI * 2, true);
+                ctx.stroke();
+                if (i++ < divs) {
+                    requestAnimFrame(arguments.callee);
+                } else {
+                var f=img(canvas.toDataURL());
+                    i = 0;
+                    requestAnimFrame(function () {
+                        //Difference between 0 and 1!
+                        ctx.clearRect(0,0,canvas.width,canvas.height);
+                        ctx.drawImage(f,0,0);
+                        ctx.beginPath();
+                        var y1 = fag[0][1] - (((fag[0][1] - fag[1][1]) / divs) * i),
+                            x1 = fag[0][0] - (((fag[0][0] - fag[1][0]) / divs) * i),y2 = (((fag[2][1] - fag[1][1]) / divs) * i) + fag[1][1], x2 = (((fag[2][0] - fag[1][0]) / divs) * i) + fag[1][0];
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        var y3=y1-(((y1-y2)/divs)*i),x3=x1-(((x1-x2)/divs)*i);
+                        bezierPoints.push([x3,y3])                        
+                        //ctx.moveTo(x+10,y);
+                        //ctx.arc(x,y,10,0,Math.PI*2,true);
+                        ctx.stroke();
+                        ctx.beginPath();
+                        ctx.moveTo(x3+10,y3);
+                        ctx.arc(x3,y3,10,0,Math.PI*2,true);
+                        ctx.fill();
+                        if (i++ < divs) {
+                        //ctx.clearRect(0,0,canvas.width,canvas.height);
+                            requestAnimFrame(arguments.callee);
+                        }else{
+                        ctx.clearRect(0,0,canvas.width,canvas.height);
+                        ctx.beginPath();
+    ctx.moveTo.apply(ctx, fag[1]);
+    ctx.lineTo.apply(ctx, fag[0]);
+    ctx.moveTo.apply(ctx, fag[1]);
+    ctx.lineTo.apply(ctx, fag[2]);
+    ctx.stroke();
+    i=0;
+    requestAnimFrame(function () {
+        //Difference between 0 and 1!
+        ctx.beginPath();
+        ctx.arc(bezierPoints[i][0],bezierPoints[i][1],3,0,Math.PI*2,true);
+        ctx.fill();
+        if (i++ < divs) {
+            requestAnimFrame(arguments.callee);
+        }else{
+          var mid=[fag];
+          i=0;
+          mid=splitCuadraticBezierInHalves(mid);        
+          setTimeout(function(){
+          ctx.clearRect(0,0,canvas.width,canvas.height);
+           var con=[]; 
+           //debugger; 
+           con.push.apply(con,con.concat.apply(con,mid));
+           ctx.beginPath();
+           //console.log(con);
+           
+           Draw2DPoints.apply(ctx,con);
+           ctx.stroke();
+           
+           mid=splitCuadraticBezierInHalves(mid);
+           
+           if (i++ < 9) {
+           setTimeout(arguments.callee,250)
+           }          
+          },250);        
+        
+        } });
+                        }
+                    });
+
+
+                }
+            });
+
+        }
+    });
+
+
+}
+bezierCurve([
+    [300, 800],
+    [100, 100],
+    [700, 400]
+], 50);
+},false);
+  </script>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+  </body>
+</html>

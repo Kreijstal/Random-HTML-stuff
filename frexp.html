@@ -1,0 +1,22 @@
+<HTML>
+<BODY>
+
+<SCRIPT language="javascript">
+var x = 4271.437;
+//var x = 8.0;
+ 
+var exp = 0;
+while(Math.pow(2,exp) < Math.abs(x))
+{
+   exp += 1;
+}
+var fr = x / Math.pow(2,exp);
+ 
+document.write("<br/>FR=");
+document.write(fr);
+document.write("<br/>EXP=");
+document.write(exp);
+</SCRIPT>
+
+</BODY>
+</HTML>

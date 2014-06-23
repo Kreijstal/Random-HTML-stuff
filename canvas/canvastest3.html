@@ -1,0 +1,27 @@
+<html><head></head><body><canvas id="canv" width="1900px" height="900px"></canvas>
+    <script>
+        
+        function draw() {
+  var canvas = document.getElementById('canv');
+  if (canvas.getContext){
+    var ctx = canvas.getContext('2d'),i;
+i=0;
+setTimeout(function () {
+    ctx.beginPath();
+    ctx.arc(770,480,i,0,Math.PI*2,false);
+    ctx.moveTo(i,20);
+    ctx.arc(20,0,i,0,Math.PI*2,false);
+    ctx.moveTo(i,900);
+    ctx.arc(900,900,i,0,Math.PI*2,false);
+    ctx.stroke();
+    i += 2;
+    if (i < 4200) setTimeout(arguments.callee, 50);
+}, 1);
+
+
+  }
+};draw()
+    </script>
+    
+    
+</body></html>

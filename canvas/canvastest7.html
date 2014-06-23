@@ -1,0 +1,38 @@
+<html><head></head><body><canvas id="canv" width="1900px" height="900px"></canvas>
+    <script>
+        
+        function draw() {
+  var canvas = document.getElementById('canv');
+  if (canvas.getContext){
+    var ctx = canvas.getContext('2d'),i;
+i=0;
+setTimeout(function () {
+    roundedRect(ctx, 390, 180, 500, 500, i);
+    i += 5;
+    if (i < 4200) setTimeout(arguments.callee, 50);
+}, 1);
+
+
+  }
+}
+
+// A utility function to draw a rectangle with rounded corners.
+
+function roundedRect(ctx,x,y,width,height,radius){
+  ctx.beginPath();
+  ctx.moveTo(x,y+radius);
+  ctx.lineTo(x,y+height-radius);
+ // ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
+  ctx.lineTo(x+width-radius,y+height);
+ // ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+  ctx.lineTo(x+width,y+radius);
+//  ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
+  ctx.lineTo(x+radius,y);
+//  ctx.quadraticCurveTo(x,y,x,y+radius);
+  ctx.lineTo(x,y+height-radius);
+  ctx.stroke();
+};draw()
+    </script>
+    
+    
+</body></html>

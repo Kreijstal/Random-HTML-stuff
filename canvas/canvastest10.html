@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html><body>
+<canvas id="myCanvas" width="3000" height="3000" style="border:1px solid #c3c3c3;"></canvas>
+<script type="text/javascript">
+function FindDistanceBetween2Points(x1,y1,x2,y2){//yay math!
+    var x=x1-x2,y=y1-y2,h2=(x*x)+(y*y);//am I reivnenting the wheel, or there is a function that already does it?
+    return Math.sqrt(h2);
+}
+
+function getAngleFromP1ToP2(x1,y1,x2,y2){//google doesn't even give me the functions!
+    var x=x2-x1,y=y2-y1;//reinventing the wheel is mandatory
+    return Math.atan2(y,x);
+}
+
+function PolarCoordinatesToCartesian(Angle,Distance){
+    var y=Math.sin(Angle)*Distance,x=Math.cos(Angle)*Distance;
+    return {x:x,y:y};
+}
+
+    var c=document.getElementById("myCanvas");
+    var cxt=c.getContext("2d");
+    var centerX = 850;
+    var centerY = 650;
+    cxt.moveTo(centerX, centerY);
+
+    var STEPS_PER_ROTATION =60;
+    var increment = 2*Math.PI/STEPS_PER_ROTATION;       
+    var theta = increment;
+    var oldX=centerX,oldY=centerY;
+function a() {
+    var newX = centerX + (theta*2.5) * Math.cos(theta),newY = centerY + (theta*2.5) * Math.sin(theta),coo;
+//console.log(newX,newY);
+    coo=PolarCoordinatesToCartesian(getAngleFromP1ToP2(centerX,centerY,(newX+oldX)/2,(newY+oldY)/2),(FindDistanceBetween2Points(centerX,centerY,newX,newY)+FindDistanceBetween2Points(centerX,centerY,oldX,oldY))/1.1);//gotta love looooooooong function names amirite?   
+    cxt.quadraticCurveTo(coo.x+centerX,coo.y+centerY,newX, newY);    
+    oldX=newX,oldY=newY;
+    theta = theta + increment;
+    cxt.lineWidth = 0.2;
+    cxt.stroke();
+    if (theta < 900 * Math.PI) {
+        setTimeout(arguments.callee, 50);
+    } else {
+        
+    }
+}
+a();
+
+
+    
+</script></body></html>

@@ -1,0 +1,104 @@
+//May not work in IE, the hell IT WON'T!, unless it's a new version of IE, of course.
+function getMouseMoveEvent(funct,bubbling){//parameter is another function where the coordinates will be sent as parameters, or that's the idea
+//also you sould save the function parameter in case you want to remove it..
+
+    bubbling=bubbling||false;
+document.addEventListener("mousemove",funct,bubbling);
+}
+getMouseMoveEvent.remove=function(funct,bubbling){
+    bubbling=bubbling||false;
+    document.removeEventListener("mousemove",funct,bubbling);
+};
+function ObjectToTable(o){//why are you reading it?!
+    var t=document.createElement("table"),x,i,y;
+    t.border="1px"; //This is an attribute, can't be cssed
+    //t.style.borderCollapse="collapse";
+    for(i in o){
+        if(o[i]&&o[i].call||o[i]===null||o[i]===undefined){
+            continue;
+        }
+        t.appendChild(x=document.createElement("tr"));
+        x.appendChild(y=document.createElement("td"));
+        //y.style.border="1px solid pink";
+        y.innerHTML=i;
+        x.appendChild(y=document.createElement("td"));
+        //y.style.border="1px solid pink";
+        y.innerHTML=o[i];
+    }
+    return t;
+}
+
+c=function(e){var y=document.getElementById("tabcont");y.innerHTML="";y.appendChild(ObjectToTable(e));};
+getMouseMoveEvent(c);
+
+function mousemsg(e){
+    
+    var div=document.createElement("div");
+    var dissapear=function(a,disRate){
+        div.style.opacity=(a-=disRate)/1000;
+        if(a<=0){
+            div.parentNode.removeChild(div);
+        }else{
+        setTimeout((function(){dissapear(a,disRate)}),1);
+        }
+    };
+    div.className=e.type;
+    
+    div.textContent=e.type.toUpperCase();
+    
+    document.body.appendChild(div);
+    div.style.top=0+"px";
+    div.style.left=e.clientX+"px";
+    switch(e.type){
+        case "click":
+            div.style.top=20+"px";
+            dissapear(2000,4);
+            break;
+        case "mousedown":
+            div.style.left=e.clientX+20+"px";
+            
+            dissapear(2000,10);
+            break;
+        case "mouseup":
+            dissapear(2000,10);
+            break;
+        case "mousemove":
+            div.style.top=e.clientY-div.clientHeight-5+"px";
+            div.style.left=e.clientX-(div.clientWidth/2)+"px";
+            dissapear(1000,40);
+            break;
+        case "dblclick":
+            div.style.left=e.pageX+"px";
+            div.style.top=e.pageY-(div.clientHeight/2)+"px";
+            dissapear(5000,2);
+            break;
+        default:
+            console.log(e.type);
+            break;
+        
+    }
+    
+}
+
+function switchcehckbox(e){
+    if(e.srcElement.checked){
+        document.addEventListener(e.srcElement.value,mousemsg,false);
+    }else{
+        var x=document.getElementsByClassName(e.srcElement.value),i;
+        document.removeEventListener(e.srcElement.value,mousemsg,false);
+        for(i=0,l=x.length;i<l;i++){
+            x[i].style.visibility="hidden";
+            console.log(x[i]);
+        }
+    }
+}
+document.addEventListener("click",mousemsg,false);//there are better ways to do this
+document.addEventListener("mouseup",mousemsg,false);
+document.addEventListener("mousedown",mousemsg,false);
+document.addEventListener("mousemove",mousemsg,false);
+document.addEventListener("dblclick",mousemsg,false);
+document.getElementById("click").addEventListener("change",switchcehckbox,false);
+document.getElementById("mouseup").addEventListener("change",switchcehckbox,false);
+document.getElementById("mousedown").addEventListener("change",switchcehckbox,false);
+document.getElementById("mousemove").addEventListener("change",switchcehckbox,false);
+document.getElementById("dblclick").addEventListener("change",switchcehckbox,false);

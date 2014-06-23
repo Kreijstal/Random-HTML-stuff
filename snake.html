@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>GOTO draw test</title>
+    <style type='text/css'>
+
+canvas {
+    border: 2px solid black;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}</style>
+  </head>
+  <body>
+   <canvas id="canvas"></canvas>
+<script type='text/javascript'>//<![CDATA[
+/*To do
+*Add menu
+*Add dificulty
+*A debug screen or something
+*Add Levels! 
+*/
+if (!Array.prototype.every) //why am i doing this for old browser i am working on a CANVAS element!
+{
+  Array.prototype.every = function(fun /*, thisp*/)
+  {
+    var len = this.length;
+    if (typeof fun != "function")
+      throw new TypeError();
+
+    var thisp = arguments[1];
+    for (var i = 0; i < len; i++)
+    {
+      if (i in this &&
+          !fun.call(thisp, this[i], i, this))
+        return false;
+    }
+
+    return true;
+  };
+}
+(function(){
+var d=document;
+canvas=d.getElementById('canvas');
+ctx = canvas.getContext&&canvas.getContext("2d");
+var DELIM=10;//Can't be less than 5!
+canvas.width = document.documentElement.clientWidth;
+canvas.width-=canvas.width%DELIM;
+canvas.height = document.documentElement.clientHeight;
+canvas.height-=canvas.height%DELIM;    
+                 
+grid={width:canvas.width/DELIM,height:canvas.height/DELIM};
+
+function init(){
+
+function SnakeChild(a,b){
+this.obj={type:"square",data:[a*DELIM,b*DELIM,DELIM-4,DELIM-4]};  
+objects.push(this.obj);
+this.var={x:a*DELIM,y:b*DELIM,nx:a,ny:b,pnx:null,pny:null}
+this.setLocation=function(x,y){
+this.obj.data[0]=(this.var.x=x)+2;this.obj.data[1]=(this.var.y=y)+2;
+}
+
+}
+function SnakeType(obj){//programming 101 Classes (prototypes) make everything so much easier, faggots.
+var x=obj&&obj.data[0]||null,y=obj&&obj.data[1]||null,children,nx,ny,Rx,Ry,pnx,pny;
+this.direction='noMove';
+this.getLocation=function(){
+return {x:nx,y:ny};
+}
+this.checkCollisions=function(){
+return !this.children.every(function(a){return !(nx==a.var.nx&&ny==a.var.ny)})
+};
+this.children=[];
+this.size={w:DELIM,h:DELIM};
+this.setLocation=function(a,b){
+obj.data[0]=x=a;obj.data[1]=y=b;
+obj.data[0]++;obj.data[1]++;
+return {x:x,y:y};
+}
+this.setNLocation=function(a,b){
+Rx=(nx=a)*DELIM;Ry=(ny=b)*DELIM;
+return {x:x,y:y};
+}
+this.move=function(){
+if(x===null&&y===null){
+this.setLocation(0,0);
+this.setNLocation(0,0);
+}
+if(Rx==x&&Ry==y){
+var k=keyControls.shift();
+if(k&&!((this.direction=="down"&&k=="up")||(this.direction=="right"&&k=="left")||(this.direction=="up"&&k=="down")||(this.direction=="left"&&k=="right"))){this.direction=k}
+pnx=nx;
+pny=ny;
+for(var i=this.children.length-1;i>0;i--){
+var chisnake=this.children[i].var;
+chisnake.pnx=chisnake.nx;
+chisnake.pny=chisnake.ny;
+chisnake.nx=this.children[i-1].var.nx; 
+chisnake.ny=this.children[i-1].var.ny;
+if(Math.abs(chisnake.pnx-chisnake.nx)>1||Math.abs(chisnake.pny-chisnake.ny)>1){
+this.children[i].setLocation(chisnake.nx*DELIM,chisnake.ny*DELIM);
+
+}
+}
+
+if(this.children[0]&&this.children[0].var){this.children[0].var.pnx=this.children[0].var.nx;
+this.children[0].var.pny=this.children[0].var.ny;;((this.children[0].var.nx=nx),(this.children[0].var.ny=ny));
+if(Math.abs(this.children[0].var.nx-this.children[0].var.pnx)>1||Math.abs(this.children[0].var.ny-this.children[0].var.pny)>1){this.children[0].setLocation(nx*DELIM,ny*DELIM);this.children[0].var.nx=nx;this.children[0].var.ny=ny}
+}
+switch(this.direction){
+case "up":
+ny--;
+break;
+case "down":
+ny++;
+break;
+case "left":
+nx--;
+break;
+case "right":
+nx++;
+break;
+}
+nx=nx>grid.width-1?0:nx<0?grid.width-1:nx;
+ny=ny>grid.height-1?0:ny<0?grid.height-1:ny;
+this.setNLocation(nx,ny);
+
+
+if(Math.abs(pnx-nx)>1||Math.abs(pny-ny)>1)this.setLocation(nx*DELIM,ny*DELIM);
+return true;
+}else{//WHAT DO IF NextX IS NOT EQUAL TO X
+x!==Rx&&(x+=Rx>x?1:-1);
+y!==Ry&&(y+=Ry>y?1:-1);
+this.children.forEach(function(az){
+var temp=az.var;
+temp.x!==(temp.nx*DELIM)&&(temp.x+=temp.nx*DELIM>temp.x?1:-1);
+temp.y!==(temp.ny*DELIM)&&(temp.y+=temp.ny*DELIM>temp.y?1:-1);
+az.setLocation(temp.x,temp.y);
+})
+this.setLocation(x,y);
+setTimeout(function(){draw();update();},2);
+return false;
+}
+}
+this.createChild=function(){
+var lastchild=this.children[this.children.length-1],p,q;
+if(lastchild){
+p=lastchild.var.nx;q=lastchild.var.ny;
+}else{
+p=nx;q=ny;
+console.log(p,q)
+}
+this.children.push(new SnakeChild(p,q));
+};
+this.toObj=function(){
+if(obj){return obj;}
+return obj={type:"square",data:[x*DELIM,y*DELIM,DELIM-2,DELIM-2]};
+}
+obj=this.toObj();
+return this;
+}
+var objects=[];
+var drawFunctions=[function(ctx){var x,y,i;
+ctx.beginPath();
+ctx.globalAlpha = 0.5;
+for(x=0;x<canvas.width;x+=DELIM){
+ ctx.moveTo(x,0);
+ ctx.lineTo(x,canvas.height);
+ ctx.moveTo(x+=DELIM,canvas.height);
+ ctx.lineTo(x,0);
+}
+for(y=0;y<canvas.height;y+=DELIM){
+ ctx.moveTo(0,y);
+ ctx.lineTo(canvas.width,y);
+ ctx.moveTo(canvas.width,y+=DELIM);
+ ctx.lineTo(0,y);
+}
+ctx.stroke();
+ctx.globalAlpha = 1;
+}];
+var head=new SnakeType();
+objects.push(head.toObj());
+function draw(){
+
+initDraw();
+for(var i=0,x,l=objects.length;i<l;i++){
+x=objects[i];
+ctx.fillStyle=x.color||"#000";
+switch(x.type){
+case "arc":
+ctx.arc.apply(ctx,x.data);
+break;
+case "roundrect":
+roundedRect.apply(ctx,x.data);
+break;
+case "square":
+default:
+ctx.fillRect.apply(ctx,x.data);
+break;
+}}}                       
+function Food(){
+var nx,ny,obj,x,y;
+this.setCoordinates=function(a,b){
+x=(nx=a)*DELIM;y=(ny=b)*DELIM;
+obj.data[0]=x+2,obj.data[1]=y+2;
+return {x:x,y:y};
+}
+this.getCoordinates=function(){
+return {x:nx,y:ny};
+};
+
+this.toobj=function(){
+if(obj){return obj}
+return obj={type:"roundrect",data:[x,y,7,7,3,"fill"],color:"red"}
+}
+
+}
+food=new Food();
+objects.unshift(food.toobj());
+food.setCoordinates(Math.round(Math.random()*(grid.width-4))+3,Math.round(Math.random()*(grid.height-4))+3)                
+function update(){
+if(head.move()){
+if(head.checkCollisions()){
+alert("Game over, motherfucker")
+};
+var hl=head.getLocation(),fl=food.getCoordinates();
+if(hl.x===fl.x&&hl.y===fl.y){
+head.createChild();
+food.setCoordinates(Math.round(Math.random()*(grid.width-4))+3,Math.round(Math.random()*(grid.height-4))+3)
+}
+draw();
+setTimeout(update,2);
+}
+
+
+}
+var keyControls=[];
+document.addEventListener('keydown',function(e){
+    	var key = e.which,d=keyControls[keyControls.length-1],lm;
+		//We will add another clause to prevent reverse gear
+		if((key == 37||key==97||key==65) && d != "right"&&d!="left") lm = "left";
+		else if((key == 38||key == 119||key==87) && d != "down"&&d!="up") lm = "up";
+		else if((key == 39||key==68||key==100) && d != "left"&&d!="right") lm = "right";
+		else if((key == 40||key==115||key==83) && d != "up"&&d!="down") lm = "down";
+    lm&&keyControls.push(lm);
+		//The snake is now keyboard controllable
+	},false)
+function initDraw(){
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+drawFunctions.forEach(function(a){var x;try{a(ctx);}catch(x){console&&console.error(x)}})
+}
+  
+update();
+
+
+
+}               
+
+function roundedRect(x,y,width,height,radius,fs){
+  this.beginPath();
+  this.moveTo(x,y+radius);
+  this.lineTo(x,y+height-radius);
+  this.quadraticCurveTo(x,y+height,x+radius,y+height);
+  this.lineTo(x+width-radius,y+height);
+  this.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+  this.lineTo(x+width,y+radius);
+  this.quadraticCurveTo(x+width,y,x+width-radius,y);
+  this.lineTo(x+radius,y);
+  this.quadraticCurveTo(x,y,x,y+radius);
+  this[fs||"stroke"]();
+};     
+
+if(ctx){
+init();
+
+}else{alert('faggot');}
+})()
+//]]>
+</script>
+  </body>
+</html>
