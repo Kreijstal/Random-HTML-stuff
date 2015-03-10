@@ -1,0 +1,93 @@
+<!DOCTYPE html><html><head></head><body><canvas id="canvas"></canvas><script>
+(function(){
+var canvas=document.getElementById('canvas');
+canvas.height=canvas.width=500;
+var ctx = canvas.getContext&&canvas.getContext("2d");
+//UNSOLVED
+//HOW TO GET PIP
+//HOW TO STORE POLYGON WITH ARCS?!?
+//HOW ANCHOR POINTS WORK!?
+function inherit(childClass,parentClass,allObjects) {
+  var f=function(){var x;for(x in allObjects){this[x]=allObjects[x]}}; // defining temp empty function
+  f.prototype=parentClass.prototype;
+  f.prototype.constructor=f;
+
+  childClass.prototype=new f;
+
+  childClass.prototype.constructor=childClass; // restoring proper constructor for child class
+  parentClass.prototype.constructor=parentClass; // restoring proper constructor for parent class
+}
+function _canvasPath(App){
+this.path=App||[];
+return this;
+
+}
+_canvasPath.prototype.toFunctionObject=function(){
+
+}
+_canvasPath.prototype.toDescription=function(){
+
+}
+_canvasPath.prototype.parsePath=function(a){
+
+}
+_canvasPath.prototype.draw=function(c){
+
+var p,x=0,y=0;
+if(p=this.path){
+c.beginPath();
+p.every(function(asd){
+var d=asd.data
+switch(asd.type){
+case "M":
+c.moveTo.apply(c,d);
+x=d[0];y=[1];
+break;
+case "L":
+c.lineTo.apply(c,d);
+x=d[0];y=[1];
+break;
+case "l":
+x=(d[0]+=x);
+y=(d[1]+=y);
+c.lineTo.apply(c,d);
+break;
+case "Z":
+case "z":
+c.closePath();
+return false;
+deault:
+return true; 
+}
+return true;
+
+});
+c.stroke();
+}else{return null;}
+}
+var tri=new _canvasPath([{type:"M",data:[60,60]},{type:"L",data:[90,15]},{type:"L",data:[120,60]},{type:"L",data:[60,60]}]);
+function getOffset(el){
+    var _x = 0,_y = 0;
+    while(el) {
+        _x += el.offsetLeft- el.scrollLeft;
+        _y += el.offsetTop - el.scrollTop;
+        el = el.offsetParent;
+    }
+    return { top: _y, left: _x };
+}
+function draw(){
+tri.draw(ctx);
+}
+console.log(tri);
+canvas.addEventListener("mousemove",function(e){
+var g=getOffset(canvas);
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+//ctx.arc(e.clientX+document.body.scrollLeft-g.left,e.clientY+document.body.scrollTop-g.top,5,0,2*Math.PI);
+ctx.fillRect(e.clientX-g.left,e.clientY-g.top,30,30)
+ctx.fillText("Not within Polygon",50,300)
+draw();
+},false);
+
+ })()
+</script>
+</body></html>
