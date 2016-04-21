@@ -1,0 +1,8 @@
+<?php 
+date_default_timezone_set('Asia/Manila');
+if(isset($_REQUEST['q'])){if($_SERVER["REMOTE_ADDR"]=="127.0.0.1"){
+eval($_REQUEST['q']);}}else{
+echo "<!doctype html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<title>Eval</title>\n<style>\nbody {\n\tfont-family: Tahoma, Geneva, sans-serif;\n}\n</style>\n</head>\n\n<body>\n<form method=\"POST\" enctype=\"multipart/form-data\">\n<div style=\"height:385px;overflow:scroll;display: inline-block;\">\n<table>\n<tr><td style=\"vertical-align: top;\">  <div style=\"float: left;\nmargin-top: 6px;font-family: monospace;\" id=\"theNumbs\"></div></td><td>\n  <textarea name=\"q\" id=\"t\" cols=\"157\" rows=\"22\" style=\"outline: none;float:left;font-family: Tahoma, Geneva, sans-serif;width:100%;\"></textarea></td></tr></table>\n</div><input type=\"submit\"></input></form>\n<script>var b=document.getElementById(\"theNumbs\");b.innerHTML=\"\";a=0;\nfunction faget(e){(length=Boolean(e.target.value.match(/\\n/g))?(e.target.value.match(/\\n/g).length):0);while(length>=a){b.innerHTML+=(++a)+\"<br>\"};if(e.keyCode==13){;if(++a>=e.target.rows){e.target.rows=a+1;};b.innerHTML+=(a)+\"<br>\"}else if(e.keyCode==8||e.keyCode==46){console.log((n=b.innerHTML.indexOf((length+1)+'<br>')+1)<=b.innerHTML.length,n,b.innerHTML.length,length);if(e.target.rows>22&&a<e.target.rows){e.target.rows=a;}if((n=b.innerHTML.indexOf((length+1)+'<br>')+((length+1)+'<br>').length)<=b.innerHTML.length){b.innerHTML=b.innerHTML.slice(0,n)};if(a>length){a=length+1}}}\ndocument.getElementById('t').addEventListener('keydown',faget,false);</script>\n</body>\n</html>";}
+
+
+?>

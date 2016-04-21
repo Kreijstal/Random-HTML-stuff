@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>JS Audiosynth</title>
+<script type="text/javascript" charset="utf-8" src="base64.js"></script>
+<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(function () {
+var sampleRate = 44100;
+var beatsPerMin = 180;
+var ticksPerBeat = 4;
+console.log(addSamples)
+var samples = {
+bassDrum: [
+[ addSamples,
+[
+[ getFreqSweep, 5000, 80, 20 ],
+[ applyClippedDistort ],
+[ applyEnvelope, 0.1, 0.4, 0.2, 0.2 ],
+[ applySinDistort, 1 ],
+[ applyGain, 0.5 ],
+],
+[
+[ getFreqSweep, 5000, 78, 30 ],
+[ applyEnvelope, 0.05, 0.4, 0.2, 0.2 ],
+[ applySinDistort, 2 ],
+[ applyGain, 0.5 ],
+],
+]
+],
+hatClosed: [
+[ getNoise, 2000 ],
+[ applyDecay, 1 ],
+[ applyResonantFilter, 0.05, 0.94, 0.9, .5 ],
+[ applyGain, 0.75 ],
+],
+hatOpen: [
+[ getNoise, 10000 ],
+[ applyResonantFilter, 0.7, 0.8, 0.5, .75 ],
+[ applyResonantFilter, 0.7, 0.8, 0.5, .8 ],
+[ applyResonantFilter, 0.8, 0.8, 0.5, .8 ],
+[ applyDecay, 0.8 ],
+],
+};
+var pattern = {
+bassDrum: [
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,
+1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,
+],
+hatClosed: [
+1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,
+1,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,1,1,0,1,0,1,0,1,1,
+1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,
+1,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,1,1,0,1,0,1,0,1,1,
+],
+hatOpen: [
+0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,
+],
+};
+/////
+function addSamples(data, sample1, sample2) {
+var data1 = generateAudioSample(sample1);
+var data2 = generateAudioSample(sample2);
+var n = Math.min(data1.length, data2.length);
+for (var i = 0; i < n; ++i) {
+data[i] = data1[i] + data2[i];
+}
+}
+
+function applyGain(data, gain) {
+var n = data.length;
+for (var i = 0; i < n; ++i) {
+data[i] *= gain;
+}
+}
+function applyClippedDistort(data) {
+var n = data.length;
+for (var i = 0; i < n; ++i) {
+data[i] = (Math.abs(data[i]) < 0.3) ? (data[i] * 2) : (data[i] / 2 + 0.4 * (data[i] > 0 ? 1 : -1));
+}
+}
+
+function applySinDistort(data, drive) {
+var n = data.length;
+var s = Math.PI * drive / 2;
+for (var i = 0; i < n; ++i) {
+data[i] = Math.sin(data[i] * s);
+}
+}
+function applyEnvelope(data, a, d, s, r) {
+var n = data.length;
+a *= n; d *= n; r *= n;
+var is = 1 - s;
+for (var i = 0; i < a; ++i) {
+data[i] *= i/a;
+}
+for (; i < (a + d); ++i) {
+data[i] *= (1 - (i-a)/d) * is + s;
+}
+for (; i < (n - r); ++i) {
+data[i] *= s;
+}
+for (var j = i; i < n; ++i) {
+data[i] *= s * (1 - (i - j) / r);
+}
+}
+
+function applyDecay(data, f) {
+var n = data.length;
+var s = f * 4;
+for (var i = 0; i < n; ++i) {
+data[i] *= Math.exp(-i/n * s);
+}
+}
+function applyResonantFilter(data, freq, rad_p, rad_z, scale) {
+var n = data.length;
+var theta = freq * 2 / sampleRate * Math.PI;
+var ap = Math.cos(theta) * rad_p, bp = Math.sin(theta) * rad_p;
+var az = Math.cos(theta) * rad_z, bz = Math.sin(theta) * rad_z;
+var a2 = 1, a1 = -2 * ap, a0 = rad_p;
+var b2 = 1, b1 = -2 * az, b0 = rad_z;
+var y1 = 0, y2 = 0, x1 = 0, x2 = 0;
+for (var i = 0; i < n; ++i) {
+var out = (b2 * data[i] + b1 * x1 + b0 * x2 - a1 * y1 - a0 * y2) / a2 * scale;
+x2 = x1;
+x1 = data[i];
+y2 = y1;
+y1 = out;
+data[i] = out;
+}
+}
+function getFreqSweep(data, length, freq1, freq2) {
+var d1 = Math.PI * 2 * freq1 / sampleRate,
+d2 = Math.PI * 2 * freq2 / sampleRate,
+dd = (d2 - d1) / length,
+dt = d1,
+t = 0;
+for (var i = 0; i < length; ++i) {
+data[i] = Math.sin(t);
+t += dt;
+dt += dd;
+}
+}
+
+function getNoise(data, length) {
+for (var i = 0; i < length; ++i) {
+data[i] = Math.random() * 2 - 1;
+}
+}
+function encodeAudio8bit(data) {
+var n = data.length;
+var integer = 0, i;
+// 8-bit mono WAVE header template
+var header = "RIFF<##>WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00<##><##>\x01\x00\x08\x00data<##>";
+
+// Helper to insert a 32-bit little endian int.
+function insertLong(value) {
+var bytes = "";
+for (i = 0; i < 4; ++i) {
+bytes += String.fromCharCode(value % 256);
+value = Math.floor(value / 256);
+}
+header = header.replace('<##>', bytes);
+}
+
+// ChunkSize
+insertLong(36 + n);
+// SampleRate
+insertLong(sampleRate);
+
+// ByteRate
+insertLong(sampleRate);
+
+// Subchunk2Size
+insertLong(n);
+// Output sound data
+for (var i = 0; i < n; ++i) {
+header += String.fromCharCode(Math.round(Math.min(1, Math.max(-1, data[i])) * 127 + 127));
+}
+return 'data:audio/wav;base64,' + btoa(header);
+}
+function encodeAudio16bit(data) {
+var n = data.length;
+var integer = 0, i;
+// 16-bit mono WAVE header template
+var header = "RIFF<##>WAVEfmt \x10\x00\x00\x00\x01\x00\x01\x00<##><##>\x02\x00\x10\x00data<##>";
+
+// Helper to insert a 32-bit little endian int.
+function insertLong(value) {
+var bytes = "";
+for (i = 0; i < 4; ++i) {
+bytes += String.fromCharCode(value % 256);
+value = Math.floor(value / 256);
+}
+header = header.replace('<##>', bytes);
+}
+
+// ChunkSize
+insertLong(36 + n * 2);
+// SampleRate
+insertLong(sampleRate);
+
+// ByteRate
+insertLong(sampleRate * 2);
+
+// Subchunk2Size
+insertLong(n * 2);
+// Output sound data
+for (var i = 0; i < n; ++i) {
+var sample = Math.round(Math.min(1, Math.max(-1, data[i])) * 32767);
+if (sample < 0) {
+sample += 65536; // 2's complement signed
+}
+header += String.fromCharCode(sample % 256);
+header += String.fromCharCode(Math.floor(sample / 256));
+}
+return 'data:audio/wav;base64,' + btoa(header);
+}
+var players = { };
+function plotAudio(data, width, height) {
+width = width || 1280;
+height = height || 200;
+var $canvas = $('<canvas>').attr({ width: width, height: height }).css({ cursor: 'pointer' }),
+ctx = $canvas[0].getContext('2d'),
+dw = width / data.length, x = 0, h2 = height / 2;
+ctx.strokeStyle = '#000';
+ctx.beginPath();
+ctx.moveTo(x, h2);
+for (var i = 0; i < data.length; ++i) {
+ctx.lineTo(x, h2 * (1 - data[i]));
+x += dw;
+}
+ctx.stroke();
+var dataUri = encodeAudio16bit(data);
+var $audioPlayer = $('<audio>').attr({ src: dataUri });
+
+$('body').append($audioPlayer).append($canvas);
+
+$canvas.click(function () {
+$audioPlayer[0].play();
+});
+}
+function generateAudioSample(sample) {
+var data = [];
+for (var j = 0; j < sample.length; ++j) {
+var func = sample[j].shift();
+var args = sample[j];
+args.unshift(data);
+func.apply(this, args);
+plotAudio(data);
+}
+return data;
+}
+function generateAudioSamples() {
+for (i in samples) {
+var data = generateAudioSample(samples[i]);
+var dataUri = encodeAudio16bit(data);
+for (var k = 0; k < 3; ++k) {
+var $audioPlayer = $('<audio>').attr({ 'class': i, src: dataUri });
+$('body').append($audioPlayer);
+}
+players[i] = $('audio.' + i);
+players[i].currentPlayer = 0;
+}
+}
+var players = { };
+generateAudioSamples();
+var delay = 1000 / (beatsPerMin / 60 * ticksPerBeat);
+var pos = 0;
+function advancePattern() {
+for (i in pattern) {
+if (pattern[i][pos]) {
+players[i][players[i].currentPlayer].play();
+players[i].currentPlayer = (players[i].currentPlayer + 1) % players[i].length;
+}
+}
+pos = (pos + 1) % pattern.bassDrum.length;
+}
+var timer = setInterval(advancePattern, delay);
+$('#play').click(function () {
+if (timer) {
+clearInterval(timer);
+timer = 0;
+}
+else {
+pos = 0;
+timer = setInterval(advancePattern, delay);
+}
+});
+});
+</script>
+</head>
+<body>
+
+<h2>JS Audio Synth Demo</h2>
+<h3>By Steven Wittens. More info can be found on <a href="http://acko.net/blog/javascript-audio-synthesis-with-html-5">the blog entry</a>.</h3>
+<button id="play">Play/pause test pattern</button>
+
+<h2>Samples</h2>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-288349-2");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+</body>
+</html>
