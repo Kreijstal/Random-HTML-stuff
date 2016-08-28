@@ -1,0 +1,84 @@
+FORM TEMPLATE CREATOR
+
+so, basically the idea is that I create something that creates forms, huh!
+Nice, it should be.
+What should be the options?
+<ul><li>A specific set of options (ratio, options element, autocomplete (for LOTS of options, hardest to implement))</li>
+<li>Boolean option</li>
+<li>Any choice (when the choices are free, there is an almost infinite amount of choices, like names, or quantities)</li>
+<li>A serial option!, that's a bonus</li></ul>
+Each event calls a function which is supposed to do something, even if just modify the value.
+Let's start by a simple boolean option, what about <code>{type:"boolean,checkbox",text:"checkbox",onchange:function(){alert("it has changed")}}</code><br>
+<script>
+var obj={type:"boolean,checkbox",properties:{checked:true},text:"checkbox: ",onLeft:true,onchange:function(){alert("it has changed")}};
+(function(){
+var formTemplate={}
+function addObjects(/*objects*/){//I hate using these functions.
+  var ret = {};
+  var len = arguments.length;
+  for (var i=0,p; i<len; i++) {
+    for (p in arguments[i]) {
+      if (arguments[i].hasOwnProperty(p)) {
+        ret[p] = arguments[i][p];
+      }
+    }
+  }
+  return ret;
+}
+function makeElem(elem,attributes,childnodes){
+var e=document.createElement(elem);
+for(var a in attributes){
+if(a=="style"){
+for(var d in attributes[a]){
+e.style[d]=attributes[a][d];
+}continue;}
+if(a=="__properties"){
+for(d in attributes[a]){
+e[d]=attributes[a][d];
+}continue;}
+e.setAttribute(a,attributes[a])
+}
+if(childnodes&&childnodes.length){
+for(var i=0,c;i<childnodes.length;i++){c=childnodes[i];if(c.length&&typeof c=="string"){e.appendChild(document.createTextNode(c));continue;}e.appendChild(c)}
+}
+return e;
+}
+
+function forObject(obj,callbak){//loops arraysOrObjects
+if(Array.isArray(obj)){
+for(var i=0,l=obj.length;i<l;i++)callbak(obj[i],obj[i])
+}else{for(i in obj){if(obj.hasOwnProperty(i)){callbak(i,obj[i])}}
+}}
+
+function createInput(obj){
+var elem,opts=["checkbox","radio","select","textarea","text"],option,values=obj.values;
+opts.forEach(function(a,b){if(RegExp(a).test(obj.type))option=b});
+if(/boolean/.test(obj.type)){values=["True","False"];}
+var e=obj.properties||{},r={},d,c;
+if(option!==3||option!==2){
+e.type=opts[option];
+}
+obj.name&&(e.name=obj.name);
+if(option===0){obj.value&&(e.value=obj.value);
+obj.checked&&(e.title=obj.checked);}
+obj.title&&(e.title=obj.title);
+obj.class&&(r.class=obj.class);
+if(option!==2||option!==1){
+c=[d=makeElem("input",e)];}else if(option===2){var k=[];
+forObject(values,function(key,value){k.push(makeElem("option",{value:key},[value]))})
+c=[d=makeElem("select",e,k)];
+}
+if(obj.onLeft||(obj.onRight===false)){c.unshift(obj.text)}else{c.push(obj.text)}
+if(obj.onchange){if(option===0)d.addEventListener("click",obj.onchange,false);else{
+d.addEventListener("change",obj.onchange,false)}}
+return makeElem("label",r,c);
+
+}
+
+})
+document.body.appendChild(createInput(obj))
+
+</script>
+<br>
+<!--https://dev.mysql.com/doc/internals/en/connection-phase-packets.html#packet-Protocol::Handshake-->
+There also will be implied properties such as isEditable (default is true) or if the text is on the left or right side of the checkbox.
