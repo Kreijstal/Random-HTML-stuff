@@ -1,4 +1,4 @@
 # Some thoughts
-* [what's this about](/why.html)
-* [about-me](/about-me.html)
-* [utilites](/utilities.html)
+* [what's this about](why.html)
+* [about-me](about-me.html)
+* [utilites](utilities.html)
