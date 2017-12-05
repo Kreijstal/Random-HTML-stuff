@@ -1,1 +1,4 @@
-I mean, this would be the most sensible thing honestly
+# Some thoughts
+* [what's this about](/why.html)
+* [about-me](/about-me.html)
+* [utilites](/utilities.html)
