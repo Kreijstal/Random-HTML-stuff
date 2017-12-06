@@ -3,6 +3,16 @@
 
 @import "{{ site.theme }}";
 
-nav>ul{
+nav ul{
  padding: 0;
+ background-color: rgba(179, 206, 182, 0.1);
+}
+
+
+nav .check~ul {
+    display: none;
+}
+
+nav .check:checked~ul {
+    display: block;
 }
