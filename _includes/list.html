@@ -4,8 +4,10 @@
         
             <li class="{% if page.url contains entry.url %}active{% endif %}">
                 <a href="{{ site.baseurl }}{{ entry.url }}">{{ entry.title }}</a>
-                {% include list.html context=entry.sublinks %}
-            </li>
+                {% if entry.sublinks %}
+                   {% include list.html context=entry.sublinks %}                
+                {% endif %}
+             </li>
         
     {% endfor %}
 </ul>
