@@ -3,8 +3,8 @@
 * [about-me](about-me.html)
 * [utilites](utilities.html)
 
-I think this is broken
+I hope it works now
 
-
+{% include pagination.html %}
 
 test
