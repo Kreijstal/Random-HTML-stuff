@@ -2,3 +2,5 @@
 * [what's this about](why.html)
 * [about-me](about-me.html)
 * [utilites](utilities.html)
+
+{{ site.data.navigation}}
