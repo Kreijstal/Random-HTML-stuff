@@ -3,6 +3,7 @@
     {% for entry in entries %}
         
             <li class="{% if page.url contains entry.url %}active{% endif %}">
+                <input type="checkbox" class="check"> 
                 <a href="{{ site.baseurl }}{{ entry.url }}">{{ entry.title }}</a>
                 {% if entry.sublinks %}
                    {% include list.html context=entry.sublinks %}                
