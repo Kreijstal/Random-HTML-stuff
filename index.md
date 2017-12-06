@@ -5,6 +5,6 @@
 
 I hope it works now
 
-{% include pagination.html %}
+{% include navigation.html %}
 
 test
