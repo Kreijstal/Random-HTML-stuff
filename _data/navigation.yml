@@ -1,14 +1,21 @@
 # Belongs at: /_data/navigation.yml
 
-- title: Home
-  url: title
+- title: Mainpage
+  url: /
 
-- title: Group of Things
-  url: /group/
+- title: fun experiments (That's why the repo is called like that)
   sublinks:
-    - title: Sub-item 1
-      url: /group/si1
-    - title: Sub-item 2
-      url: /group/si2
-    - title: Sub-item 3
-      url: /group/si3
+    - title: formcreator
+      url: /formcreator.html
+    - title: index (2).html
+      url: /index (2).html
+    - title: mousemove.html
+      url: /mousemove.html
+    - title: pasteEvent.html
+      url: /pasteEvent.html
+    - title: snake
+      url: /snake.html
+    - title: sound.html
+      url: /sound.html
+    - title: test.html
+      url: /test.html
