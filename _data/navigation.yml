@@ -1,9 +1,7 @@
 # Belongs at: /_data/navigation.yml
 
-- title: Mainpage
-  url: /
-
 - title: fun experiments (That's why the repo is called like that)
+  url: /
   sublinks:
     - title: formcreator
       url: /formcreator.html
