@@ -5,6 +5,6 @@
 
 I think this is broken
 
-{% include navigation.html}
+<!--{% include navigation.html}-->
 
 test
