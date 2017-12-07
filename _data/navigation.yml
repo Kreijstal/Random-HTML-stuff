@@ -46,8 +46,10 @@
            url: /canvas/canvastest14.html
          - title: It's a canvas test
            url: /canvas/canvastest15.html
+    - title: bouncy ball
+      url: /ball/ball1.html
     - title: formcreator
-      url: /formcreator.html
+      url: /mouseinfo.html
     - title: index (2).html
       url: /index (2).html
     - title: mousemove.html
