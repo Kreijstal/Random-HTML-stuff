@@ -1,3 +1,7 @@
+Hello there.
+So I'm just starting here, I think this will be a blog about my adventures, hopefully it will be nice.
+And hopefully you will like it.. 
+
 About
 ========
 This is a website where I will put blogposts, ideas, doodles, whatever I want, because... uhh why not, everyone and their mom has their website and I should too, I can share links with people, images or whatever.
