@@ -48,10 +48,20 @@
            url: /canvas/canvastest15.html
     - title: bouncy ball
       url: /ball/ball1.html
+    - title: Mouse Info
+      url: /MouseInfo.html
     - title: formcreator
-      url: /mouseinfo.html
+      url: /MouseInfo.html
     - title: index (2).html
       url: /index (2).html
+    - title: Converter.html
+      url: /Converter.html
+    - title: FibbonacciWord.html
+      url: /FibbonacciWord.html
+    - title:Form Creator
+      url: formcreator.html
+    - title:frexp.html
+      url: frexp.html
     - title: mousemove.html
       url: /mousemove.html
     - title: pasteEvent.html
