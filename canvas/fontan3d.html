@@ -1,0 +1,103 @@
+
+<h4>Welp, rotation skills, here we go.</h4>
+
+Alright, so we will use canvas for this, apparently, guess we can't TRY to draw 3D with objects, or can we?<br>
+
+<canvas id="cot"></canvas>
+
+<script>
+function arraysEqual(a, b) {
+//I ALWAYS come to the problem of not finding this VERY useful function around so I always have to write it AGAIN or copy it from some website, I need to make some standard functions script, damn.
+  if (a === b) return true;
+  if (a == null || b == null||a.length != b.length) return false;
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+function getLastItemNotEqual(arr,item){//gets last item in array not equal to item, item is an array
+var i=arr.length;
+while(i--){if(!arraysEqual(arr[i],item)){return arr[i]}}
+return null;
+}
+var perspective=500;//I have no idea what this does, yes I wrote it, (based on someone's else work)
+function rotatePoint(point,center,angle,FirD,SecD){
+var x=point[FirD]-center[FirD],y=point[SecD]-center[SecD],angleNow=Math.atan2(y,x)+angle,
+distance=Math.sqrt((x*x)+(y*y)),result=[],NoD=3-(FirD+SecD);
+result[FirD]=distance*Math.cos(angleNow)+center[FirD];
+result[SecD]=distance*Math.sin(angleNow)+center[SecD];
+result[NoD]=point[NoD];
+return result;
+}
+function map3Dto2D(x,y,z){//Moves further points to the center
+return [x+(1-(perspective/(perspective+z)))*(centerpoint[0]-x),y+(1-(perspective/(perspective+z)))*(centerpoint[1]-y)];
+}
+
+function drawPointArray(ctx,PointArray){
+if(PointArray.length){
+ctx.moveTo.apply(ctx,map3Dto2D.apply(null,PointArray[0]));
+for(var i=1,l=PointArray.length,z;i<l;i++){
+ctx.lineTo.apply(ctx,map3Dto2D.apply(null,PointArray[i]));
+}}
+}
+function drawCircle3D(ctx,point,radius){
+var p=map3Dto2D.apply(null,point);
+ctx.fillStyle="green"
+ctx.arc(p[0],p[1],radius,0,Math.PI*2)
+ctx.stroke();
+}
+function drawPolygon(ctx,polygon){
+Pts=polygon.points,Origin=map3Dto2D.apply(null,Pts[0]),Second=map3Dto2D.apply(null,Pts[1]),Last=map3Dto2D.apply(null,getLastItemNotEqual(Pts,Pts[0]));//A polygon requires at least 3 points!
+//debugger;
+ctx.beginPath();
+ctx.fillStyle="green"
+ctx.arc(Origin[0],Origin[1],5,0,Math.PI*2)
+ctx.arc(Last[0],Last[1],5,0,Math.PI*2)
+ctx.arc(Second[0],Second[1],5,0,Math.PI*2)
+ctx.fill();
+if(!(Origin[0]>Last[0]||Origin[1]>Second[1])){
+//if(Origin[0]>Last[0]){
+ctx.fillStyle="red";
+}else{ctx.fillStyle="blue";}
+ctx.beginPath()
+drawPointArray(ctx,Pts);ctx.fill()
+}
+function Polygon(PointArray,o1,o2){
+this.points=PointArray;
+this.orientation1=o1
+this.orientation2=o2
+}
+Polygon.prototype.rotatePolygon=function(axis,angle,FirD,SecD){
+return this.points=this.points.map(function(a){return rotatePoint(a,axis,angle,FirD,SecD)})
+}
+function rotatePolygon(PointArray,axis,angle,FirD,SecD){
+//FirD and SecD means the dimensions where the rotation is taking place
+return PointArray.map(function(a){return rotatePoint(a,axis,angle,FirD,SecD)})
+}
+
+var canvas=document.getElementById("cot"),ctx=canvas.getContext("2d");
+canvas.height=canvas.width=500,centerpoint=[canvas.width/2,canvas.height/2]
+polygon=[new Polygon([[20,20,10],[20,120,10],[120,120,10],[120,20,10],[20,20,10]]),new Polygon(
+[[380,380,10],[380,480,10],[480,480,10],[480,380,10],[380,380,10]]),new Polygon(
+[[200,200,70],[200,300,70],[300,300,70],[300,200,70],[200,200,70]])]                                                                         
+ctx.fillStyle="red";
+setInterval(function(){
+ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx.beginPath()
+polygon.forEach(function(a){drawPolygon(ctx,a)})
+//ctx.stroke()
+
+polygon[0].rotatePolygon([70,70,10],Math.PI*1/40,0,2);
+polygon[1].rotatePolygon([430,430,10],-Math.PI*1/10,0,2);
+polygon[2].rotatePolygon([250,250,-40],-Math.PI*1/10,1,2);
+                                    
+},24)
+//http://codepen.io/anon/pen/vhyLo?editors=001
+
+/*ctx.moveTo(180,180)
+ctx.lineTo(90,90)
+ctx.lineTo(0,180)
+ctx.lineTo(180,180)*/
+ctx.stroke()
+
+</script>
