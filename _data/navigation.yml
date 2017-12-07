@@ -3,6 +3,49 @@
 - title: fun experiments (That's why the repo is called like that)
   url: /
   sublinks:
+    - title: canvas
+      url: /canvas/
+      sublinks: 
+         - title: Mouse move experiment
+           url: /canvas/mousemove.html
+         - title: Bezier curve testing
+           url: /canvas/BezierTest1.html
+         - title: Another Bezier curve testing
+           url: /canvas/BezierTest2.html
+         - title: Some 3D displayer I made in order to understand 3d engines
+           url: /canvas/fontan3d.html
+         - title: Parques!
+           url: /canvas/parques.html
+         - title: It's a canvas test
+           url: /canvas/canvastest1.html
+         - title: It's a canvas test
+           url: /canvas/canvastest2.html
+         - title: It's a canvas test
+           url: /canvas/canvastest3.html
+         - title: It's a canvas test
+           url: /canvas/canvastest4.html
+         - title: It's a canvas test
+           url: /canvas/canvastest5.html
+         - title: It's a canvas test
+           url: /canvas/canvastest6.html
+         - title: It's a canvas test
+           url: /canvas/canvastest7.html
+         - title: It's a canvas test
+           url: /canvas/canvastest8.html
+         - title: It's a canvas test
+           url: /canvas/canvastest9.html
+         - title: It's a canvas test
+           url: /canvas/canvastest10.html
+         - title: It's a canvas test
+           url: /canvas/canvastest11.html
+         - title: It's a canvas test
+           url: /canvas/canvastest12.html
+         - title: It's a canvas test
+           url: /canvas/canvastest13.html
+         - title: It's a canvas test
+           url: /canvas/canvastest14.html
+         - title: It's a canvas test
+           url: /canvas/canvastest15.html
     - title: formcreator
       url: /formcreator.html
     - title: index (2).html
