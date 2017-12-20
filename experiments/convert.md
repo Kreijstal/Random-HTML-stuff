@@ -1,4 +1,5 @@
-<script type="text/javascript" src="convert.js"/>
+<script type="text/javascript" src="convert.js" />
+
 <style>pre {
     white-space: pre-wrap;       /* Since CSS 2.1 */
     white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
