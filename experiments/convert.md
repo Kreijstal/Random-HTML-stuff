@@ -11,6 +11,7 @@
 #input{
 width:100%;
 min-height: 23em;
+font-family:monospace;
 }</style>
 # Form converter
 Whoa this is exciting! So, you see I'm tired of doing HTML forms by hand, validating them by hand, and doing absolutely everything, there are of course some HTML form creators but they're not that good, right?
@@ -18,6 +19,9 @@ So, what did I do! My own solution! This is very new which is why I would like a
 Ok, so let me tell you how this language works.
 
 First you define some Classes, then you define the available values of these ranges
+<pre>
+
+</pre>
 <textarea id="input">
 //comment
 /*multiline comment*/
