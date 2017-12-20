@@ -2921,7 +2921,7 @@ return str;
 }
 
 #input{
-width:100%
+width:100%;
 min-height: 23em;
 }</style>
 <textarea id="input">/* Ok, so let me tell you how this language works.
