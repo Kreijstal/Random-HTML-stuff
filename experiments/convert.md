@@ -2912,18 +2912,28 @@ catch(e){str=e.toString()}
 return str;
 }
 </script>
+<style>pre {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+#input{
+width:100%
+min-height: 23em;
+}</style>
 <textarea id="input">/* Ok, so let me tell you how this language works.
 
 First you define some Classes, then you define the available values of these ranges
 */
 
-
 String:text;
 Number:number;
 DonationAmounts:radio ("$5"|"$10"|"$25");
-DonationAmounts amount, String email
 
-</textarea>
+DonationAmounts amount, String email</textarea>
 <button onclick="lol()">Convert</button>
 <div id="result"></div>
 <pre id="preview"></pre>
