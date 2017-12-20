@@ -2901,7 +2901,7 @@ formParse = /*
   };
 })();
 function lol(){
-document.getElementById('result').innerHTML=document.getElementById('preview').innerHTML=convert(document.getElementById('input').value)
+document.getElementById('result').innerHTML=document.getElementById('preview').innerText=convert(document.getElementById('input').value)
 
 }
 
