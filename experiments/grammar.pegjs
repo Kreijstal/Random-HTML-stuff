@@ -9,41 +9,137 @@ Start
    variables: variables,
    parameters: parameters
  })/*(function(as) {
-   var vars = {};
-   as.variables.forEach(function(a) {
-     return vars[a.type] = {
-       def: a.def,
-       validation: a.validation
-     }
-   })
-function elementCreator(element,flags,inSide){
-switch(element){
-    case "radio":
-    return "<label "+(flags.c?'class="'+flags.c+'"':"")+">"+(flags.t||flags.value)+'<input type="'+element+'" name="'+flags.name+'" value="'+flags.value+'" '+(flags.d?'checked="checked"':"")+'></label>';
-    default:
-    console.log(arguments)
-    return '<'+element+((flags.c?' class="'+flags.c+'"':(flags.type?' class="'+flags.type+'Collection"':"")))+'>'+((flags.t?flags.t.value:(flags.type?flags.type:"")))+inSide+'</span>'
-break;
-}
-}
-   return "<form>" + as.parameters.map(function(form) {
-     var retString = "";
-     switch (vars[form.type].def) {
-       case "radio":
+  var vars = {};
+  as.variables.forEach(function(a) {
+    return vars[a.type] = {
+      def: a.def,
+      validation: a.validation
+    }
+  })
+  var inputTypes = ["radio", "text", "color", "checkbox", "submit",
+    "number"
+  ]
 
-         retString = elementCreator("span",Object.assign(vars[form.type].validation.flags?vars[form.type].validation.flags:{},{type:form.type}),(vars[form.type].validation.value).map(function(answer) {
+  function flagToHTML(flags, el) {
+    var outerFlags = [],
+      innerFlags = [],
+      display = ""
+    var defaults = {
+      radio: "checked",
+      option: "selected"
+    }
 
-           if (answer.value.type == "Literal")
-             return elementCreator("radio",Object.assign((answer.flags?answer.flags:{}),{name:form.name,value:answer.value.value}))
-         }).join('\n'))
-         break;
-       default:
-         retString = "<input type=\"" + vars[form.type].def + "\" name=\"" + form.name + "\"/>"
-     }
-     return retString;
+    Object.keys(flags).forEach(function(flag) {
+      switch (flag) {
+        case "t":
+          display = flags[flag].valuefriend - add
+          break;
+        case "d":
+          innerFlags.push(defaults[el] + '="' + defaults[el] +
+            '"')
+          break;
+        case "type":
+          if (!(flags.c || flags.class)) {
+            outerFlags.push('class="' + flags[flag].value +
+              'Collection"')
+          }
+          break;
+        case "c":
+          outerFlags.push('class="' + flags[flag].value + '"')
+          break;
+        case "value":
+          if (!flags.t) {
+            display = flags[flag].value
+          }
+        case "name":
+          innerFlags.push(flag + '="' + flags[flag].value + '"')
+          break;
+        default:
+          outerFlags.push(flag + '="' + flags[flag].value + '"')
 
-   }).join('') + "</form>"
- })(as)*/
+      }
+    })
+    if (inputTypes.indexOf(el) !== -1) innerFlags.push('type="' +
+      el + '"')
+    return {
+      outerFlags,
+      innerFlags,
+      display
+    }
+  }
+
+  function elementCreator(element, flags, inSide) {
+    if (element) {}
+    switch (element) {
+      case "radio":
+        var flag = flagToHTML(flags, element)
+        return '<label' + flag.outerFlags.join(' ') + '>' + flag.display +
+          '<input type="' +
+          element + '"  /></label>';
+      case "option":
+        return '<' + element + ((flags.c ? ' class="' + flags.c +
+            '"' : (flags.type ? ' class="' + flags.type +
+              'Collection"' : ""))) + '>' + ((flags.t ? flags.t : (
+            flags.type ? flags.type : ""))) + inSide + '</' +
+          element + '>'
+      default:
+        return '<' + element + ((flags.c ? ' class="' + flags.c +
+            '"' : (flags.type ? ' class="' + flags.type +
+              'Collection"' : ""))) + '>' + ((flags.t ? flags.t : (
+            flags.type ? flags.type : ""))) + inSide + '</' +
+          element + '>'
+        break;
+    }
+  }
+
+  function parseVariable(theVar, form) {
+    function eC(i) {
+      elementCreator("span", Object.assign(theVar.validation
+        .flags ? theVar.validation.flags : {}, {
+          type: form.type
+        }), i)
+    }
+    var retString = "";
+    switch (theVar.def) {
+      case "radio":
+        retString = eC((theVar.validation.value).map(function(
+          answer) {
+          if (answer.value.type == "Literal")
+            return elementCreator("radio", Object.assign((
+              answer.flags ? answer.flags : {}), {
+              name: form.name,
+              value: answer.value.value
+            }))
+        }).join('\n'))
+        break;
+      case "optgroup":
+        retString = elementCreator("optgroup", {}, theVar.validation
+          .value.map(function(
+            answer) {
+            if (answer.value.type == "Literal")
+              return elementCreator("option", Object.assign((
+                answer.flags ? answer.flags : {}), {
+                name: form.name,
+                value: answer.value.value
+              }), answer.value.value)
+          }).join('\n'))
+
+        break;
+      case "select":
+      case "datalist":
+        retString = eC(i)
+        break;
+      default:
+        retString = eC("<input type=\"" + theVar.def + "\" name=\"" +
+          form.name + "\"/>")
+    }
+    return retString;
+  }
+
+  return "<form>" + as.parameters.map(function(form) {
+    return parseVariable(vars[form.type], form);
+  }).join('') + "</form>"
+})(as)*/
  }
  
 varAssign
