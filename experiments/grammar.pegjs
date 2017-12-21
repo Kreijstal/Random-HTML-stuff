@@ -19,9 +19,11 @@ Start
 function elementCreator(element,flags,inSide){
 switch(element){
     case "radio":
-    return "<span>"++'<input type="radio" name=""></span>'
+    return "<label "+(flags.c?'class="'+flags.c+'"':"")+">"+(flags.t||flags.value)+'<input type="'+element+'" name="'+flags.name+'" value="'+flags.value+'" '+(flags.d?'checked="checked"':"")+'></label>';
     default:
-break:
+    console.log(arguments)
+    return '<'+element+((flags.c?' class="'+flags.c+'"':(flags.type?' class="'+flags.type+'Collection"':"")))+'>'+((flags.t?flags.t.value:(flags.type?flags.type:"")))+inSide+'</span>'
+break;
 }
 }
    return "<form>" + as.parameters.map(function(form) {
@@ -29,11 +31,11 @@ break:
      switch (vars[form.type].def) {
        case "radio":
 
-         retString = (vars[form.type].validation.value).map(function(answer) {
+         retString = elementCreator("span",Object.assign(vars[form.type].validation.flags?vars[form.type].validation.flags:{},{type:form.type}),(vars[form.type].validation.value).map(function(answer) {
 
            if (answer.value.type == "Literal")
              return elementCreator("radio",Object.assign((answer.flags?answer.flags:{}),{name:form.name,value:answer.value.value}))
-         }).join('\n')
+         }).join('\n'))
          break;
        default:
          retString = "<input type=\"" + vars[form.type].def + "\" name=\"" + form.name + "\"/>"
@@ -41,10 +43,7 @@ break:
      return retString;
 
    }).join('') + "</form>"
- })({
-   variables: variables,
-   parameters: parameters
- })*/
+ })(as)*/
  }
  
 varAssign
@@ -56,7 +55,7 @@ answers
  = value:(StringLiteral/RegularExpressionLiteral/Identifier/answersDelimeter)? _ flags:Flags? {return {value:value,flags:flags}}
  
 Flags
- = flags:(Flag+) {return flags.reduce((a,b)=>a.concat(b))}
+ = flags:(Flag+) {var flagsO={};flags.reduce((a,b)=>a.concat(b)).forEach(function(flag){flagsO[flag.flag]=(flag.value==null?true:flag.value)});return flagsO}
 
 Flag
  = "-"o:("-"?)c:([A-z0-9]+) _ as:(StringLiteral/Identifier)? 
