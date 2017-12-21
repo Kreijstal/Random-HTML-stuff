@@ -16,14 +16,23 @@ Start
        validation: a.validation
      }
    })
-
+function elementCreator(element,flags,inSide){
+switch(element){
+    case "radio":
+    return "<span>"++'<input type="radio" name=""></span>'
+    default:
+break:
+}
+}
    return "<form>" + as.parameters.map(function(form) {
      var retString = "";
      switch (vars[form.type].def) {
        case "radio":
+
          retString = (vars[form.type].validation.value).map(function(answer) {
+
            if (answer.value.type == "Literal")
-             return "<label><input type=\"radio\" name=\"" + form.name + "\" value=\"" + answer.value.value + "\">" + answer.value.value + "</label>"
+             return elementCreator("radio",Object.assign((answer.flags?answer.flags:{}),{name:form.name,value:answer.value.value}))
          }).join('\n')
          break;
        default:
@@ -47,12 +56,27 @@ answers
  = value:(StringLiteral/RegularExpressionLiteral/Identifier/answersDelimeter)? _ flags:Flags? {return {value:value,flags:flags}}
  
 Flags
- = Flag
+ = flags:(Flag+) {return flags.reduce((a,b)=>a.concat(b))}
 
 Flag
- = "-"o:("-"?)c:([A-z0-9]+) as:(_(StringLiteral/Identifier))? 
- {
-return {o:o,as:as,c:c}}
+ = "-"o:("-"?)c:([A-z0-9]+) _ as:(StringLiteral/Identifier)? 
+ {if (o) return [{
+  flag: c.join(''),
+  value: as
+}];
+else return c.map(function(a, b, c) {
+  if (c.length - 1 == b) {
+    return {
+      flag: a,
+      value: as
+    }
+  } else {
+    return {
+      flag: a,
+      value: null
+    }
+  }
+})}
 
 answersDelimeter
  = "(" _ f:answers _ l:answersRep* ")" {return [f].concat(l)}
