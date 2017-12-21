@@ -5,36 +5,54 @@
 
 Start
  = variables:varsAssign parameters:parameterDelimeter 
- {return (function(as){
-var vars={};as.variables.forEach(function(a){return vars[a.type]={def:a.def,validation:a.validation}})
+ {return ({
+   variables: variables,
+   parameters: parameters
+ })/*(function(as) {
+   var vars = {};
+   as.variables.forEach(function(a) {
+     return vars[a.type] = {
+       def: a.def,
+       validation: a.validation
+     }
+   })
 
-return "<form>"+as.parameters.map(function(form){
-var retString="";
-switch(vars[form.type].def){
-    case "radio":
-    retString=(vars[form.type].validation).map(function(answer){
-    if(answer.type=="Literal")
-    return "<label><input type=\"radio\" name=\""+form.name+"\" value=\""+answer.value+"\">"+answer.value+"</label>"
-}).join('\n')
-break;
-    default:
-retString="<input type=\""+vars[form.type].def+"\" name=\""+form.name+"\"/>"
-}
-return retString;
+   return "<form>" + as.parameters.map(function(form) {
+     var retString = "";
+     switch (vars[form.type].def) {
+       case "radio":
+         retString = (vars[form.type].validation.value).map(function(answer) {
+           if (answer.value.type == "Literal")
+             return "<label><input type=\"radio\" name=\"" + form.name + "\" value=\"" + answer.value.value + "\">" + answer.value.value + "</label>"
+         }).join('\n')
+         break;
+       default:
+         retString = "<input type=\"" + vars[form.type].def + "\" name=\"" + form.name + "\"/>"
+     }
+     return retString;
 
-}).join('')+"</form>"
-})({variables:variables,parameters:parameters})}
+   }).join('') + "</form>"
+ })({
+   variables: variables,
+   parameters: parameters
+ })*/
+ }
  
 varAssign
- =  _ type:Identifier _ ":" _ def:Identifier _ validation:answers? _ ";" {return {type:type.name,def:def.name,validation:validation}}
+ =  _ type:Identifier _ ":" _ def:Identifier _ validation:answers?  ";" {return {type:type.name,def:def.name,validation:validation}}
 varsAssign
 = (varAssign)*
 
 answers
- = (StringLiteral/RegularExpressionLiteral/Identifier/answersDelimeter) 
+ = value:(StringLiteral/RegularExpressionLiteral/Identifier/answersDelimeter)? _ flags:Flags? {return {value:value,flags:flags}}
  
-answerFlags
- = "d"
+Flags
+ = Flag
+
+Flag
+ = "-"o:("-"?)c:([A-z0-9]+) as:(_(StringLiteral/Identifier))? 
+ {
+return {o:o,as:as,c:c}}
 
 answersDelimeter
  = "(" _ f:answers _ l:answersRep* ")" {return [f].concat(l)}
