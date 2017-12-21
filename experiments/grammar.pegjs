@@ -5,10 +5,7 @@
 
 Start
  = variables:varsAssign parameters:parameterDelimeter 
- {return ({
-   variables: variables,
-   parameters: parameters
- })/*(function(as) {
+ { /*(function(as) {
   var vars = {};
   as.variables.forEach(function(a) {
     return vars[a.type] = {
@@ -16,104 +13,158 @@ Start
       validation: a.validation
     }
   })
-var elementTypes={input:["radio","text","color","checkbox","submit","number"],noName:["option"]}
+  var elementTypes = {
+    input: ["radio", "text", "color", "checkbox", "submit",
+      "number"],
+    noName: ["option"]
+  }
 
-function flagToHTML(flags,el){
-var outerFlags=[],innerFlags=[],display=""
-var defaults={radio:"checked",option:"selected"}
+  function flagToHTML(flags, el) {
+    var outerFlags = [],
+      innerFlags = [],
+      display = ""
+    var defaults = {
+      radio: "checked",
+      option: "selected"
+    }
 
-Object.keys(flags).forEach(function(flag){
-switch(flag){
-    case "t":
-display=flags[flag].value
-break; 
-    case "d":
-innerFlags.push(defaults[el]+'="'+defaults[el]+'"')
-break; 
-    case "type":
-if(!(flags.c||flags.class)){
-outerFlags.push('class="'+flags[flag].value+'Collection"')
-}
-break;
-    case "c":
-outerFlags.push('class="'+flags[flag].value+'"')
-break;
-    case "value":
-if(!flags.t){display=flags[flag].value}
-    case "name":
-if(whichKey(elementTypes,el)!=="noName")
-innerFlags.push(flag+'="'+flags[flag].value+'"')
-console.log("HELP",whichKey(elementTypes,el),el)
-break; 
-    default: outerFlags.push(flag+'="'+flags[flag].value+'"')
-   
-}
-})
-if(elementTypes.input.indexOf(el)!==-1)innerFlags.push('type="'+el+'"')
-return {outerFlags:" "+outerFlags.join(" "),innerFlags:" "+innerFlags.join(" "),display:display}
-}
-function whichKey(obj,element){
-return Object.keys(obj).find(function(key){obj[key].indexOf(element)!==-1})
-}
-  function elementCreator(element, flags, inSide) {
-    switch (whichKey(elementTypes,element)) {
-      case "input":
-var flag=flagToHTML(flags,element)
-        return '<label'+flag.outerFlags+'>' + flag.display + '<input '+flag.innerFlags+'/>'+inSide+'</label>';
-        case "noName":
+    Object.keys(flags).forEach(function(flag) {
+      switch (flag) {
+        case "t":
+          display = flags[flag].value
+          break;
+        case "d":
+          innerFlags.push(defaults[el] + '="' + defaults[el] +
+            '"')
+          break;
+        case "type":
+          if (!(flags.c || flags.class)) {
+            outerFlags.push('class="' + flags[flag] +
+              'Collection"')
+          }
+          break;
+        case "c":
+          outerFlags.push('class="' + flags[flag] + '"')
+          break;
+        case "name":
+          if (whichKey(elementTypes, el) !== "noName"){
+if ((!flags.t)) {
+            display = flags[flag];
+          }
+            innerFlags.push(flag + '="' + flags[flag] + '"')}
+          break;
+        case "value":
+          if ((!flags.t)&&whichKey(elementTypes, el) == "noName") {
+            display = flags[flag];
+          }
+          innerFlags.push(flag + '="' + flags[flag] + '"')
+
+          break;
         default:
-var flag=flagToHTML(flags,element);console.log(flag,flags,element,"aaa")
-return '<' + element +flag.outerFlags+flag.innerFlags+ '>' + flag.display+ inSide + '</'+element+'>'
+          outerFlags.push(flag + '="' + (flags[flag].value||flags[flag]) + '"')
+      }
+    })
+    if (elementTypes.input.indexOf(el) !== -1) innerFlags.push(
+      'type="' + el + '"')
+    return {
+      outerFlags: " " + outerFlags.join(" "),
+      innerFlags: " " + innerFlags.join(" "),
+      display: display
+    }
+  }
+
+  function whichKey(obj, element) {
+    return Object.keys(obj).find(function(key) {
+      return obj[key].indexOf(element) !== -1
+    })
+  }
+
+  function elementCreator(element, flags, inSide) {
+
+    switch (whichKey(elementTypes, element)) {
+      case "input":
+        var flag = flagToHTML(flags, element)
+console.log(flags,element,flag,"HOLY")
+        return '<label' + flag.outerFlags + '>' + flag.display +
+          '<input ' + flag.innerFlags + '/>' + (inSide?inSide:"") + '</label>';
+      case "noName":
+      default:
+        var flag = flagToHTML(flags, element);
+
+        return '<' + element + flag.outerFlags + flag.innerFlags +
+          '>' + (inSide ? inSide : flag.display) + '</' + element +
+          '>'
     }
   }
 
   function parseVariable(theVar, form) {
     function eC(i) {
-      elementCreator("span", Object.assign(theVar.validation
+     return elementCreator("span", Object.assign(theVar.validation
         .flags ? theVar.validation.flags : {}, {
           type: form.type
         }), i)
     }
     var retString = "";
     switch (theVar.def) {
-      case "radio":
+
+      case "optgroup":
+        retString = elementCreator("optgroup", {}, theVar.validation
+          .value.map(function(
+            answer) {
+            if (answer.value.type == "Literal")
+              return elementCreator("option", Object.assign((
+                answer.flags ? answer.flags : {}), {
+                name: form.name,
+                value: answer.value.value
+              }))
+          }).join('\n'))
+
+        break;
+      case "select":
+      case "datalist":
         retString = eC((theVar.validation.value).map(function(
           answer) {
           if (answer.value.type == "Literal")
-            return elementCreator("radio", Object.assign((
+            return elementCreator("option", Object.assign((
+                answer.flags ? answer.flags : {}), {
+                name: form.name,
+                value: answer.value.value
+              })); else if(answer.value.type=="Identifier"){
+return parseVariable(vars[answer.value.name],form);
+}
+        }).join('\n'))
+break;
+     default:
+       if(Array.isArray(theVar.validation.value)){
+retString= eC(theVar.validation.value.map(function(
+          answer) {
+          if (answer.value.type == "Literal")
+            return elementCreator(theVar.def, Object.assign((
               answer.flags ? answer.flags : {}), {
               name: form.name,
               value: answer.value.value
             }))
         }).join('\n'))
-        break;
-        case "optgroup":
-retString= elementCreator("optgroup",{},theVar.validation.value.map(function(
-          answer) {
-          if (answer.value.type == "Literal")
-            return elementCreator("option", Object.assign((
-              answer.flags ? answer.flags : {}), {
+}else{
+retString=eC(elementCreator(theVar.def, Object.assign((
+              theVar.validation.flags ? theVar.validation.flags : {}), {
               name: form.name,
-              value: answer.value.value
-            }),answer.value.value)
-        }).join('\n'))
-         
-break;
-      case "select":
-      case "datalist":
-        retString = eC(i)
+              value: theVar.validation.value
+            })))
+}
+        
         break;
-      default:
-        retString = eC("<input type=\"" + theVar.def + "\" name=\"" +
-          form.name + "\"/>")
     }
     return retString;
   }
 
   return "<form>" + as.parameters.map(function(form) {
     return parseVariable(vars[form.type], form);
-  }).join('') + "</form>"
-})(as)*/
+  }).join('\n') + "</form>"
+})*/return ({
+   variables: variables,
+   parameters: parameters
+ })
  }
  
 varAssign
