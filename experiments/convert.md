@@ -33,11 +33,11 @@ String:text;
 Number:number;
 Volvo:optgroup ("ok"|"then");
 Genders:radio ("male"|"female"|"other");
-Boolean:checkbox ("test"|"test2")
+Boolean:checkbox ("test"|"test2");
 Cars:select (Volvo);
 Email:text;
 
-String name, Number age,Genders gender</textarea>
+String first_name,String last_name,Number age,Genders gender</textarea>
 <button onclick="lol()">Convert</button>
 <div id="result"></div>
 <pre id="preview"></pre>
