@@ -280,7 +280,7 @@ formParse = /*
                       theVar.validation.flags ? theVar.validation.flags : {}), {
                       name: form.name,
                       value: theVar.validation.value,
-                      t:{value:((answer.flags&&answer.flags.t)?answer.flags.t.value:form.name)}
+                      t:{value:((theVar.validation.flags&&theVar.validation.flags.t)?theVar.validation.flags.t.value:form.name)}
                     })))
         }
                 
