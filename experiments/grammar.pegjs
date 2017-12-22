@@ -144,7 +144,7 @@ retString=eC(elementCreator(theVar.def, Object.assign((
               theVar.validation.flags ? theVar.validation.flags : {}), {
               name: form.name,
               value: theVar.validation.value,
-              t:{value:((answer.flags&&answer.flags.t)?answer.flags.t.value:form.name)}
+              t:{value:((theVar.validation.flags&&theVar.validation.flags.t)?theVar.validation.flags.t.value:form.name)}
             })))
 }
         
@@ -446,7 +446,7 @@ IdentifierRep
  = ","_ as:Identifier _ {return as} 
 _
  = (WhiteSpace / LineTerminatorSequence / Comment)*
- 
+  
 
 LineTerminatorSequence "end of line"
   = "\n"
