@@ -26,13 +26,15 @@ First you define some Classes, then you define the available values of these ran
 //comment
 /*multiline comment*/
 //So you define new classes by classname then colon : and then the type of the input element
-String:text; //This is a class String input type text
-Number:number; //This is a class number input type number
-Genders:radio ("male"|"female"|"other"); //An array is defined by being between parentheses and having | as a delimeter, radio type elements always expects an array
+String:text;
+Number:number;
+DonationAmounts:radio ("$5"|"$10"|"$25") -t"Select the amount to donate";
+Volvo:optgroup ("ok"|"then");
+Genders:radio ("male"|"female"|"other");
+Cars:select (Volvo);
+Email:text;
 
-//So the idea I had, forms are like function parameters, so I thought about displaying it like the parameters of a function in a Strong Typed language like Java (but without the function (is there a better way?))
-String name, Number age,Genders gender
-//Ok there is still the issue what if you want to have a different display text</textarea>
+DonationAmounts amount, String name, Number age,Genders gender</textarea>
 <button onclick="lol()">Convert</button>
 <div id="result"></div>
 <pre id="preview"></pre>
