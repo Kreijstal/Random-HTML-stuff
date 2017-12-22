@@ -31,13 +31,13 @@ After the form is done you can then edit it, but you can already be sure of the 
 //So you define new classes by classname then colon : and then the type of the input element
 String:text;
 Number:number;
-DonationAmounts:radio ("$5"|"$10"|"$25") -t"Select the amount to donate";
 Volvo:optgroup ("ok"|"then");
 Genders:radio ("male"|"female"|"other");
+Boolean:checkbox ("test","test2")
 Cars:select (Volvo);
 Email:text;
 
-DonationAmounts amount, String name, Number age,Genders gender</textarea>
+String name, Number age,Genders gender</textarea>
 <button onclick="lol()">Convert</button>
 <div id="result"></div>
 <pre id="preview"></pre>
