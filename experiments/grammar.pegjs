@@ -48,18 +48,11 @@ Start
           break;
         case "name":
           if (whichKey(elementTypes, el) !== "noName"){
-if ((!flags.t)) {
-            display = flags[flag];
-          }
             innerFlags.push(flag + '="' + flags[flag] + '"')}
           break;
         case "value":
-          if ((!flags.t)&&whichKey(elementTypes, el) == "noName") {
-            display = flags[flag];
-          }
    if(flags[flag])
           innerFlags.push(flag + '="' + flags[flag] + '"')
-
           break;
         default:
           outerFlags.push(flag + '="' + (flags[flag].value||flags[flag]) + '"')
@@ -68,8 +61,8 @@ if ((!flags.t)) {
     if (elementTypes.input.indexOf(el) !== -1) innerFlags.push(
       'type="' + el + '"')
     return {
-      outerFlags: " " + outerFlags.join(" "),
-      innerFlags: " " + innerFlags.join(" "),
+      outerFlags: outerFlags.length?" " + outerFlags.join(" "):"",
+      innerFlags: innerFlags.length?" " + innerFlags.join(" "):"",
       display: display
     }
   }
@@ -86,7 +79,7 @@ if ((!flags.t)) {
       case "input":
         var flag = flagToHTML(flags, element)
         return '<label' + flag.outerFlags + '>' + flag.display +
-          '<input ' + flag.innerFlags + '/>' + (inSide?inSide:"") + '</label>';
+          '<input' + flag.innerFlags + '/>' + (inSide?inSide:"") + '</label>';
       case "noName":
       default:
         var flag = flagToHTML(flags, element);
@@ -128,7 +121,7 @@ if ((!flags.t)) {
             return elementCreator("option", Object.assign((
                 answer.flags ? answer.flags : {}), {
                 name: form.name,
-                value: answer.value.value
+                value: answer.value.value,
               })); else if(answer.value.type=="Identifier"){
 return parseVariable(vars[answer.value.name],form);
 }
@@ -136,20 +129,22 @@ return parseVariable(vars[answer.value.name],form);
 break;
      default:
        if(Array.isArray(theVar.validation.value)){
-retString= eC(theVar.validation.value.map(function(
+retString= eC((theVar.validation&&theVar.validation.flags&&theVar.validation.flags.t?theVar.validation.flags.t.value:form.name)+theVar.validation.value.map(function(
           answer) {
           if (answer.value.type == "Literal")
             return elementCreator(theVar.def, Object.assign((
               answer.flags ? answer.flags : {}), {
               name: form.name,
-              value: answer.value.value
+              value: answer.value.value,
+              t:{value:((answer.flags&&answer.flags.t)?answer.flags.t.value:answer.value.value)}
             }))
         }).join('\n'))
 }else{
 retString=eC(elementCreator(theVar.def, Object.assign((
               theVar.validation.flags ? theVar.validation.flags : {}), {
               name: form.name,
-              value: theVar.validation.value
+              value: theVar.validation.value,
+              t:{value:((answer.flags&&answer.flags.t)?answer.flags.t.value:form.name)}
             })))
 }
         
