@@ -14,8 +14,7 @@ Start
     }
   })
   var elementTypes = {
-    input: ["radio", "text", "color", "checkbox", "submit",
-      "number"],
+    input: ["button", "checkbox", "color", "date", "datetime", "datetime-local", "email", "file", "hidden", "image", "month", "number", "password", "radio", "range", "reset", "search", "submit", "tel", "text", "time", "url", "week"],
     noName: ["option"]
   }
 
@@ -463,5 +462,3 @@ WhiteSpace "whitespace"
   / "\u00A0"
   / "\uFEFF"
   / Zs
-              
-              
