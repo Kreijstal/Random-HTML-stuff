@@ -174,7 +174,7 @@ Flags
  = flags:(Flag+) {var flagsO={};flags.reduce((a,b)=>a.concat(b)).forEach(function(flag){flagsO[flag.flag]=(flag.value==null?true:flag.value)});return flagsO}
 
 Flag
- = "-"o:("-"?)c:([A-z0-9]+) _ as:(StringLiteral/Identifier)? 
+ = "-"o:("-"?)c:([A-z0-9]+) _ as:(StringLiteral/Identifier)? _
  {if (o) return [{
   flag: c.join(''),
   value: as
