@@ -5,7 +5,7 @@
 
 Start
  = variables:varsAssign parameters:parameterDelimeter 
- { /*(function(as) {
+ { return (function(as) {
   var vars = {};
   as.variables.forEach(function(a) {
     return vars[a.type] = {
@@ -57,6 +57,7 @@ if ((!flags.t)) {
           if ((!flags.t)&&whichKey(elementTypes, el) == "noName") {
             display = flags[flag];
           }
+   if(flags[flag])
           innerFlags.push(flag + '="' + flags[flag] + '"')
 
           break;
@@ -84,7 +85,6 @@ if ((!flags.t)) {
     switch (whichKey(elementTypes, element)) {
       case "input":
         var flag = flagToHTML(flags, element)
-console.log(flags,element,flag,"HOLY")
         return '<label' + flag.outerFlags + '>' + flag.display +
           '<input ' + flag.innerFlags + '/>' + (inSide?inSide:"") + '</label>';
       case "noName":
@@ -161,7 +161,7 @@ retString=eC(elementCreator(theVar.def, Object.assign((
   return "<form>" + as.parameters.map(function(form) {
     return parseVariable(vars[form.type], form);
   }).join('\n') + "</form>"
-})*/return ({
+})({
    variables: variables,
    parameters: parameters
  })
