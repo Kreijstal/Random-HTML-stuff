@@ -29,5 +29,6 @@ Reactions
 =======
 This must be the biggest problem I have with people, I don't know how to react to things at all, I would like some explanation around it, here I will put some examples.
 
-#You complain about your punctuality issues and someone advices you to buy a car, which could obviously solve your problem, but you get offended by the suggestion, because you cannot afford a car.
-#Someone asks you a question, then they stop you because you talk too much and they really don't care.
+1.) You complain about your punctuality issues and someone advices you to buy a car, which could obviously solve your problem, but you get offended by the suggestion, because you cannot afford a car.
+
+2.) Someone asks you a question, then they stop you because you talk too much and they really don't care. (What an asshole!)
