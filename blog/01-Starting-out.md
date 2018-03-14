@@ -1,3 +1,5 @@
+Hi, everyone is allowed to rant once in a while, the purpose is to save people from me talking about this bullshit, but the truth is that I need to get it all out, otherwise I'll probably explode!
+
 Rant
 ======
 
