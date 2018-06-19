@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom Markers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+      var stuff=[{"name":"Hochschule Bremen • Bremen","coordinates":["8.80169360000002","53.0792962"]},{"name":"Hochschule Zittau/Görlitz • Zittau","coordinates":["14.8029971","50.8999681"]},{"name":"Universität des Saarlandes • Saarbrücken","coordinates":["6.9969327","49.2401572"]},{"name":"Hochschule Furtwangen","coordinates":["8.81920960000002","47.9823316"]},{"name":"Hochschule Merseburg • Merseburg","coordinates":["11.9917462","51.3563278"]},{"name":"Hochschule Furtwangen * Villingen-Schwenningen","coordinates":["8.46408689999998","48.0594021"]},{"name":"Hochschule Rhein-Waal * Cléveris","coordinates":["6.12954000000002","51.786726"]},{"name":"Hochschule für angewandte Wissenschaften Würzburg * Schweinfurt","coordinates":["10.2194227","50.0492047"]},{"name":"Universität Magdeburg * Magdeburgo","coordinates":["11.6276237","52.1205333"]},{"name":"Hochschule Ostwestfalen * Lemgo","coordinates":["8.90186249999999","52.0266732"]},{"name":"Hochschule für angewandte Wissenschaften Würzburg * Schweinfurt","coordinates":["10.2194227","50.0492047"]},{"name":"Private Hochschule für Wirtschaft * Diepholz","coordinates":["8.37078780000002","52.6056456"]},{"name":"Beuth Hochschule für Technik Berlin • Berlin","coordinates":["13.404954","52.5200066"]},{"name":"Hochschule Hannover • Hannover","coordinates":["9.73201040000004","52.3758916"]},{"name":"Hochschule Hannover • Hannover","coordinates":["9.73201040000004","52.3758916"]},{"name":"Technische Hochschule Ingolstadt • Ingolstadt","coordinates":["11.4257540999999","48.7665351"]},{"name":"Hochschule Mannheim • Mannheim","coordinates":["8.46603949999997","49.4874592"]},{"name":"Hochschule Karlsruhe * Karlsruhe","coordinates":["8.40365270000007","49.0068901"]},{"name":"Fachhochschule Südwestfalen • Iserlohn","coordinates":["7.69608419999997","51.3765096"]},{"name":"Hochschule für angewandte  * Augsburgo","coordinates":["10.89779","48.3705449"]},{"name":"Hochschule Darmstadt • Darmstadt","coordinates":["8.65119290000007","49.8728253"]},{"name":"Technische Hochschule Mittelhessen * Friedberg","coordinates":["8.74086999999997","50.3248933"]},{"name":"Hochschule für angewandte Wissenschaften * Aschaffenburg","coordinates":["9.13555539999993","49.9806625"]},{"name":"Hochschule Bochum  * Bochum","coordinates":["7.21623629999999","51.4818445"]},{"name":"Ernst-Abbe-Hochschule  * Jena","coordinates":["11.5892372000001","50.927054"]},{"name":"Hochschule Reutlingen * Reutlingen","coordinates":["9.2038043","48.5069389"]},{"name":"ochschule Ulm Technik * Ulm","coordinates":["9.98760760000005","48.4010822"]},{"name":"Hochschule Niederrhein • Krefeld","coordinates":["6.58534169999996","51.3387609"]},{"name":"Technische Hochschule * Deggendorf","coordinates":["12.9574787","48.8408515"]},{"name":"Hochschule für Technik * Offenburg","coordinates":["7.94980169999997","48.473451"]},{"name":"Gottfried Wilhelm Leibniz * Hannover","coordinates":["9.73201040000004","52.3758916"]},{"name":"Hochschule * Aalen ","coordinates":["10.0971163","48.8366887"]},{"name":"Technische Universität * Ilmenau","coordinates":["10.9254728","50.6843502"]},{"name":"Hochschule Koblenz * Coblenza","coordinates":["7.58899589999999","50.3569429"]},{"name":"Westfälische Hochschule * Bocholt","coordinates":["6.61509169999999","51.8384277"]},{"name":"Hochschule Kaiserslautern * Kaiserslautern","coordinates":["7.74912649999999","49.4400657"]},{"name":"Hochschule Koblenz • Koblenz","coordinates":["7.58899589999999","50.3569429"]},{"name":"Hochschule Mittweida * Mittweida","coordinates":["12.9740557","50.9853149"]},{"name":"Wilhelm Büchner Hochschule * Pfungstadt","coordinates":["8.60353620000001","49.8028671"]},{"name":"Fachhochschule Kiel • Kiel","coordinates":["10.1227651","54.3232927"]},{"name":"Ostbayerische Technische * Ratisbona","coordinates":["12.1016236","49.0134297"]},{"name":"Technische Universität Darmstadt * Darmstadt","coordinates":["8.65119290000007","49.8728253"]},{"name":"Hochschule für Angewandte Wissenschaften  * Hamburgo","coordinates":["9.99368189999996","53.5510846"]},{"name":"Friedrich-Alexander * Erlangen","coordinates":["11.0119611","49.5896744"]},{"name":"Hochschule für angewandte Wissenschaften * Rosenheim","coordinates":["12.1181047","47.8571272"]},{"name":"Universität Stuttgart • Stuttgart","coordinates":["9.18293210000002","48.7758459"]},{"name":"ochschule Osnabrück • Osnabrück","coordinates":["8.04717879999998","52.2799112"]},{"name":"Technische Universität  * Hamburgo","coordinates":["9.99368189999996","53.5510846"]},{"name":"Universität Kassel • Kassel","coordinates":["9.47974610000006","51.3127114"]},{"name":"Hochschule Hamm-Lippstadt • Lippstadt","coordinates":["8.34064809999995","51.6712278"]},{"name":"Jade Hochschule  * Wilhelmshaven","coordinates":["8.1068722","53.5323403"]},{"name":"ochschule für angewandte Wissenschaften * Kempten","coordinates":["10.3157835","47.7285699"]},{"name":"AKAD Hochschule Stuttgart  * Stuttgart","coordinates":["9.18293210000002","48.7758459"]},{"name":"DIPLOMA Hochschule  * Bad Sooden-Allendorf","coordinates":["9.98009569999999","51.2703403"]},{"name":"Hochschule Pforzheim  * Pforzheim","coordinates":["8.69462859999999","48.8921862"]},{"name":"Fachhochschule Aachen • Aachen","coordinates":["6.08388679999996","50.7753455"]},{"name":"Hochschule Ruhr West- * Mülheim an der Ruhr","coordinates":["6.88452259999997","51.4185682"]},{"name":"Fachhochschule Bielefeld • Bielefeld","coordinates":["8.53247080000006","52.0302285"]},{"name":"Hochschule Wismar  * Wismar","coordinates":["11.4516022","53.8979416"]},{"name":"Frankfurt University of Applied Sciences • Frankfurt am Main","coordinates":["8.68212670000003","50.1109221"]},{"name":{},"coordinates":["7.01155519999998","51.4556432"]},{"name":"Hochschule Ruhr West * Mülheim an der Ruhr","coordinates":["6.88452259999997","51.4185682"]},{"name":"Hochschule Wismar * Wismar","coordinates":["11.4516022","53.8979416"]},{"name":"Hochschule Esslingen • Göppingen","coordinates":["9.65124909999997","48.7054382"]},{"name":"Universität Rostock • Rostock","coordinates":["12.0991466","54.0924406"]},{"name":"Hochschule Fulda * Fulda","coordinates":["9.68084490000001","50.5558095"]},{"name":"Hamburger Fern-Hochschule * Hamburgo","coordinates":["9.99368189999996","53.5510846"]},{"name":"Hochschule Aalen - Technik und Wirtschaft • Aalen","coordinates":["10.0971163","48.8366887"]},{"name":"Hochschule Ostwestfalen-Lippe • Lemgo","coordinates":["8.9018625","52.0266732"]},{"name":"Fachhochschule Aachen • Aachen","coordinates":["6.08388679999996","50.7753455"]},{"name":"Duale Hochschule Baden-Württemberg • Lörrach","coordinates":["7.67092479999997","47.6169191"]},{"name":"Duale Hochschule Baden-Württemberg * Stuttgart","coordinates":["9.18293210000002","48.7758459"]},{"name":"Hochschule Niederrhein • Krefeld","coordinates":["6.58534169999996","51.3387609"]},{"name":"Duale Hochschule Baden-Württemberg • Mannheim","coordinates":["8.46603949999997","49.4874592"]},{"name":"Duale Hochschule Baden-Württemberg  * Mannheim","coordinates":["8.46603949999997","49.4874592"]},{"name":"Hochschule Zittau/Görlitz • Zittau","coordinates":["14.8029971","50.8999681"]},{"name":"Hochschule Bochum  * Bochum","coordinates":["7.21623629999999","51.4818445"]},{"name":"Duale Hochschule Baden-Württemberg • Mannheim","coordinates":["8.46603949999997","49.4874592"]},{"name":"Hochschule Niederrhein • Krefeld","coordinates":["6.58534169999996","51.3387609"]},{"name":"Fachhochschule Bielefeld • Gütersloh","coordinates":["8.38575349999996","51.9032375"]},{"name":"Fachhochschule Aachen • Aachen","coordinates":["6.08388679999996","50.7753455"]},{"name":"Westfälische Hochschule Gelsenkirchen * Bocholt","coordinates":["6.61509169999999","51.8384277"]},{"name":"hochschule 21 • Buxtehude","coordinates":["9.69157410000003","53.4674857"]},{"name":"Jade Hochschule  * Wilhelmshaven","coordinates":["8.1068722","53.5323403"]},{"name":"Hochschule Aalen * Aalen","coordinates":["10.0971163","48.8366887"]},{"name":"Karlsruher Institut für Technologie • Karlsruhe","coordinates":["8.40365270000007","49.0068901"]},{"name":"Hochschule Bochum  * Heiligenhaus","coordinates":["6.96559590000004","51.3273148"]},{"name":"Hochschule für angewandte  * Augsburgo","coordinates":["10.89779","48.3705449"]},{"name":"Hochschule für Technik * Offenburg","coordinates":["7.94980169999997","48.473451"]},{"name":"Hochschule Esslingen • Göppingen","coordinates":["9.65124909999997","48.7054382"]},{"name":"Technische Hochschule * Núremberg","coordinates":["11.0766654","49.4521018"]},{"name":"Hochschule für Technik und Wirtschaft des * Saarbrücken","coordinates":["6.9969327","49.2401572"]},{"name":"Hochschule Magdeburg-Stendal • Magdeburg","coordinates":["11.6276237","52.1205333"]},{"name":"Technische Universität Chemnitz • Chemnitz","coordinates":["12.9213697","50.827845"]},{"name":"Fachhochschule Südwestfalen • Iserlohn","coordinates":["7.69608419999997","51.3765096"]}]
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: new google.maps.LatLng("53.0792962", "8.80169360000002"),
+          mapTypeId: 'roadmap',
+           styles: [
+  {
+    "featureType": "administrative.land_parcel",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.neighborhood",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "landscape.natural",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#e0efef"
+      },
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#c0e8e8"
+      },
+      {
+        "hue": "#1900ff"
+      },
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.business",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "lightness": 100
+      },
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "lightness": 700
+      },
+      {
+        "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "stylers": [
+      {
+        "color": "#7dcdcd"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  }
+]
+        });
+
+        var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+        var icons = {
+          parking: {
+            icon: iconBase + 'parking_lot_maps.png'
+          },
+          library: {
+            icon: iconBase + 'library_maps.png'
+          },
+          info: {
+            icon: iconBase + 'info-i_maps.png'
+          },
+          uni:{
+           icon : "http://domis.sytes.net:240/Codiad/workspace/img_533577.png"
+           }
+        };
+                var features = stuff.map(b=>({type:'uni',position:new google.maps.LatLng(b.coordinates[1],b.coordinates[0])}))
+
+
+        // Create markers.
+        features.forEach(function(feature) {
+          var marker = new google.maps.Marker({
+            position: feature.position,
+            icon: icons[feature.type].icon,
+            map: map
+          });
+        });
+      }
+      //http://www.google.com/maps/d/kml?mid=1OfQ7YlQL15wC6v57mlzSFz1aUDUAbY6-
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYehe-ekgiRcv6rpk4Iiu_BAezGm5Oyv4&callback=initMap&mid=1OfQ7YlQL15wC6v57mlzSFz1aUDUAbY6-">
+    </script>
+  </body>
+</html>
