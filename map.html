@@ -182,14 +182,15 @@
            icon : "http://domis.sytes.net:240/Codiad/workspace/img_533577.png"
            }
         };
-                var features = stuff.map(b=>({type:'uni',position:new google.maps.LatLng(b.coordinates[1],b.coordinates[0])}))
+                var features = stuff.map(b=>({name:b.name,type:'uni',position:new google.maps.LatLng(b.coordinates[1],b.coordinates[0])}))
 
 
         // Create markers.
         features.forEach(function(feature) {
           var marker = new google.maps.Marker({
+            animation: google.maps.Animation.DROP,
             position: feature.position,
-            icon: icons[feature.type].icon,
+            label: feature.name,
             map: map
           });
         });
