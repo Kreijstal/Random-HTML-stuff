@@ -5,3 +5,5 @@ I don't know why but I was always like the class clown, a bit too immature, a bi
 But I'm learning slowly how to behave, or how to get what I want, because I do like learning, and I'm very passionate about it, even though sometimes I'm not self aware much.
 
 I am trying to learn how to socialize, I must do write about some epiphanies I've gotten.
+
+I think I hate scrum with disgust.
