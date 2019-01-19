@@ -59,9 +59,9 @@
     - title: FibbonacciWord.html
       url: /FibbonacciWord.html
     - title: Form Creator
-      url: formcreator.html
+      url: /formcreator.html
     - title: frexp.html
-      url: frexp.html
+      url: /frexp.html
     - title: mousemove.html
       url: /mousemove.html
     - title: pasteEvent.html
