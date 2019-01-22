@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <title>Post And Save Table?</title>
+  <style type="text/css">
+body{
+background:#eeffff;
+}  
+
+.nob{
+border:none;
+background:transparent;
+width:100%;
+}  
+
+.delcolumn {
+	-moz-box-shadow:inset 0px 1px 0px 0px #858585;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #858585;
+	box-shadow:inset 0px 1px 0px 0px #858585;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #3fbbd4), color-stop(1, #73f3ff) );
+	background:-moz-linear-gradient( center top, #3fbbd4 5%, #73f3ff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3fbbd4', endColorstr='#73f3ff');
+  background-color:#3fbbd4;
+  text-align:center;
+}.delcolumn:hover {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #73f3ff), color-stop(1, #3fbbd4) );
+	background:-moz-linear-gradient( center top, #73f3ff 5%, #3fbbd4 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#73f3ff', endColorstr='#3fbbd4');
+	background-color:#73f3ff;
+}.delcolumn:active {
+	position:relative;
+	top:1px;
+}
+.delc{	
+  background:transparent;
+  border:none;
+	display:inline-block;
+	color:#484a49;
+	font-family:arial;
+	font-size:8px;
+	font-weight:bold;
+	padding:1px 27px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ffffff;}
+table{
+width:100%;
+}
+  </style>
+  </head>
+  <body>
+        <form>
+        <table border="1" id="table">
+        <thead><tr id='th'></tr></thead>
+        <tbody id="tb">
+        
+        </tbody>
+        </table>
+        <button id="addrow">Add a row</button>
+        <button id="addcol">Add a column</button>
+        <script>
+(function(){globVar={wc:0,hc:0,inptag:'<input type="text" class="nob"/>'}
+document.getElementById('addrow').addEventListener('click',addRow,false);
+function addRow(e){
+var a=document.createElement('tr'),d=globVar.wc,x;
+while(d--){
+x=document.createElement('td');
+x.innerHTML=globVar.inptag;
+x.setAttribute('data-coli',globVar.wc);
+a.appendChild(x);
+}
+tb.appendChild(a);
+globVar.hc++;
+e.preventDefault();
+return false;}
+document.getElementById('addcol').addEventListener('click',addCol,false);
+function addCol(e){
+var a=tb.getElementsByTagName('tr'),d=a.length,x;
+globVar.wc++;
+while(d--){
+x=document.createElement('td');
+x.innerHTML=globVar.inptag;
+x.setAttribute('data-coli',globVar.wc);
+a[d].appendChild(x);
+}
+x=document.createElement('td');
+x.setAttribute('data-coli',globVar.wc);
+x.innerHTML="<button class='delc'>x</button>";
+x.className='delcolumn';
+th.appendChild(x);
+e.preventDefault();
+return false;
+}
+function delCol(e){
+e.target.getAttribute('data-coli');
+
+e.preventDefault();
+return false;
+}
+
+}
+
+
+
+)()
+        </script>       
+        </form>
+  </body>
+</html>
