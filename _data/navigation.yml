@@ -51,7 +51,7 @@
     - title: Mouse Info
       url: /MouseInfo.html
     - title: formcreator
-      url: /MouseInfo.html
+      url: /experiments/convert
     - title: index (2).html
       url: /index (2).html
     - title: Converter.html
@@ -72,3 +72,5 @@
       url: /sound.html
     - title: test.html
       url: /test.html
+    - title: table.html
+      url: /table.html
